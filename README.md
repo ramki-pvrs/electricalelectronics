@@ -19,7 +19,7 @@
 - Abstraction: abstract implementation (Abstract class, Interfaces)
 - Encapsulation: hide data and methods acting on that data - Private instance attributes in class; possible to update instantiated object only by getters and setters  
     -- Abstraction is design level process and Encapsulation is implementation level process  
-    -- Encapsulation is used to provide privacy and maintain control over transparency of data(getters and setters; immutable objects)
+    -- Encapsulation is used to provide privacy and maintain control over transparency of data(getters and setters (accessor and mutator); immutable objects)
 - Inheritance: Sub-class extending Parent Class
 - Polymorphism:
    -- Compile Time Polymorphism (Early Binding): Method Overloading - same method name but different number of args or different type of args
@@ -55,7 +55,32 @@
 - final variables must be initialized when declared or in constructor of the class they are declared  
 - security and perfomance are benefits from final class, method or variables; compiler optmizes when it knows finals cannot be changed
    
-# Access Modifiers and Non-access Modifiers
+# Access Modifiers and Non-access Modifiers  
+## Access Modifiers  
+- visibility control: in Java, Access modifiers help to restrict the scope of a class, constructor, variable, method, or data member  
+- It provides security, accessibility, etc to the user depending upon the access modifier used with the element.
+- default: can be used only within the package
+- private: can only be used inside the class where it is declared
+- protected: accessible within the same package or subclasses in different packages
+- public: accessible from everywhere in the program  
+
+## Non-access Modifiers  
+- They are used with classes, methods, variables, constructors, etc to provide information about their behavior to JVM  
+- **static**: memory management; apply to variables, methods, blocks, and nested classes  
+    -- belongs to a class and not objects  
+    -- objects can use static variables methods   
+    -- object methods can use static variables but static methods (class methods) cannot use object variables  
+- **final**: applicable only to a variable, a method, or a class. It is used to restrict a user in Java  
+   -- if applied to a class, that class cannot be extended  
+   -- if applied to a method, that method cannot be over-ridden  
+- **synchronized**: Java Synchronization is used to make sure by some synchronization method that only one thread can access the resource at a given point in time.  
+   -- Java provides a way of creating threads and synchronizing their tasks using synchronized blocks  
+- **transient**:  used in serialization; at the time of serialization if we are not storing the variable value persistent, we use transient keyword  
+   -- addresses security concerns, when user data arrives may be we dont want to store password or dob persistent  
+   -- another use cases, add transient to calculated variables based on other variable; age from dob
+- **volatile**:  
+- **native**: 
+    
 
 ## Interfaces  
 - Interfaces abstract behavior of objects
