@@ -27,7 +27,9 @@
    -- Run Time Polymorphism (Late Binding): Method Overriding - sub-class over-riding parent class  
    
 ## Randoms  
-- As Grady Booch put it, "An object has state, behavior, and identity". 
+- As Grady Booch put it, "An object has state, behavior, and identity"  
+- Abstraction and Encapsulation both hides something; Abstraction hides implementation and Encapsulation hides object data and methods  
+   -- to access hidden data, you have to use getters and to update hidden data use setters (another name is accessors and mutators)
  
 
 ## Abstract Classes
@@ -97,7 +99,16 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
 
 
 - **native**: only for methods; the native keyword in Java is applied to a method to indicate that the method is implemented in native code using JNI (Java Native Interface).  
-   -- The methods which are implemented in C, C++ are called native methods or foreign methods.
+   -- The methods which are implemented in C, C++ are called native methods or foreign methods.  
+   
+## Constructors  
+- Constructor name is same as Class name
+- Constructors are used to initialize the objects after they are created
+- JVM provides default constructor without any args  
+- Constructors can be overloaded - different number of args or different types of args makes them overloaded 
+- Constructor chaining possible  
+- super keyword 
+
     
 
 ## Interfaces  
