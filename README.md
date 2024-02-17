@@ -1,4 +1,5 @@
-# References Used
+# References Used  
+- https://github.com/ramki-pvrs/electricalelectronics/blob/main/README.md
 
 
 
@@ -59,10 +60,10 @@
 ## Access Modifiers  
 - visibility control: in Java, Access modifiers help to restrict the scope of a class, constructor, variable, method, or data member  
 - It provides security, accessibility, etc to the user depending upon the access modifier used with the element.
-- default: can be used only within the package
-- private: can only be used inside the class where it is declared
-- protected: accessible within the same package or subclasses in different packages
-- public: accessible from everywhere in the program  
+- **default**: can be used only within the package
+- **private**: can only be used inside the class where it is declared
+- **protected**: accessible within the same package or subclasses in different packages
+- **public**: accessible from everywhere in the program  
 
 ## Non-access Modifiers  
 - They are used with classes, methods, variables, constructors, etc to provide information about their behavior to JVM  
@@ -70,6 +71,7 @@
     -- belongs to a class and not objects  
     -- objects can use static variables methods   
     -- object methods can use static variables but static methods (class methods) cannot use object variables  
+    -- static methods can be overloaded but not over-ridden
 - **final**: applicable only to a variable, a method, or a class. It is used to restrict a user in Java  
    -- if applied to a class, that class cannot be extended  
    -- if applied to a method, that method cannot be over-ridden  
@@ -87,7 +89,7 @@
    -- Note that volatile should not be confused with the static modifier. static variables are class members that are shared among all objects. There is only one copy of them in the main memory. 
       **volatile vs synchronized**: Before we move on let’s take a look at two important features of locks and synchronization. 
 
-**Mutual Exclusion**: It means that only one thread or process can execute a block of code (critical section) at a time.
+**Mutual Exclusion**: It means that only one thread or process can execute a block of code (critical section) at a time.  
 **Visibility**: It means that changes made by one thread to shared data are visible to other threads.
 Java’s synchronized keyword guarantees both mutual exclusion and visibility. If we make the blocks of threads that modify the value of the shared variable synchronized only one thread can enter the block and changes made by it will be reflected in the main memory. All other threads trying to enter the block at the same time will be blocked and put to sleep. 
 
@@ -99,10 +101,23 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
     
 
 ## Interfaces  
-- Interfaces abstract behavior of objects
+- Interface **abstracts behavior of objects**
 - Class implements one or more Interfaces; csv of interfaces
 - Class which implements an interface must implement all methods defined in that interface
--   
+- while class is a blue-print of an object state(attributes and methods), interface is blue-print of object behavior (only methods)  
+   -- Java supports only single inheritance but multiple interface implementations
+- interface can contain attributes and only method definitions (methods are not implemented)  
+- all methods are public  
+- all attributes are public static final (that means they cannot be changed; only can be used)  
+- an interface can extend another interface and a class which implements this interface chain should implement all methods of interfaces from the chain  
+- **JDK 8**:  
+   -- interface can contain default implementation for methods  
+         -- when a new method added to the interface, it will still work with old class which implemented this interface but does have any implementation for this new interface method  
+   -- define static methods in interfaces that can be called independently without an instance reference  
+   
+- In a Simple way, the interface contains multiple abstract methods, so write the implementation in implementation classes. If the implementation is unable to provide an implementation of all abstract methods, then declare the implementation class with an abstract modifier, and complete the remaining method implementation in the next created child classes. It is possible to declare multiple child classes but at final we have completed the implementation of all abstract methods.  
+
+- **JDK 9**: interfaces can contain the following also Static Methods; Private Methods; Private Statis Methods
 
 
 
