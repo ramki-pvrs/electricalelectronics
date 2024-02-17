@@ -101,8 +101,8 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
     
 
 ## Interfaces  
-- Interface **abstracts behavior of objects**
-- Class implements one or more Interfaces; csv of interfaces
+- Interface **abstracts behavior of objects**  
+- Class implements one or more Interfaces; csv of interfaces  
 - Class which implements an interface must implement all methods defined in that interface
 - while class is a blue-print of an object state(attributes and methods), interface is blue-print of object behavior (only methods)  
    -- Java supports only single inheritance but multiple interface implementations
