@@ -16,6 +16,10 @@ public class MainEntryClass {
         System.out.println(ItemType.E1.type);
         System.out.println(ItemType.TV.type);
         System.out.println(ItemType.valueOf("E1"));
+        
+        
+        //Java 9: use interface static method directly without object association
+        System.out.println(ConvertCurrency.getUSDValue(100));
 
     }
 
