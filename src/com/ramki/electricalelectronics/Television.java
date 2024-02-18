@@ -2,13 +2,22 @@ package com.ramki.electricalelectronics;
 
 public class Television extends Electronics implements BuyerMethods {
     
-    private static int tvsCount = 0;
+    public static int tvsCount = 0;
     
     //association relation - Composition in specific - tight coupling; Screen Belongs to TV
     private Screen screen;
-    private int screenResolution;
+    private String screenResolution;
     private int currentChannel; 
-    
+    private boolean tvON; 
+
+    public boolean isTvON() {
+        return tvON;
+    }
+
+    public void setTvON(boolean tvON) {
+        this.tvON = tvON;
+    }
+
     public Screen getScreen() {
         return screen;
     }
@@ -17,11 +26,11 @@ public class Television extends Electronics implements BuyerMethods {
         this.screen = screen;
     }
 
-    public int getScreenResolution() {
+    public String getScreenResolution() {
         return screenResolution;
     }
 
-    public void setScreenResolution(int screenResolution) {
+    public void setScreenResolution(String screenResolution) {
         this.screenResolution = screenResolution;
     }
 
@@ -33,16 +42,17 @@ public class Television extends Electronics implements BuyerMethods {
         this.currentChannel = currentChannel;
     }
 
+    //constructor ONE
     public Television(String itemTypeName, String itemSubTypeName, String itemBrandName, String itemMeasurementUnitType) {
         super(itemTypeName, itemSubTypeName, itemBrandName, itemMeasurementUnitType);
         this.tvsCount++;
     }
     
-    
-    public Television(String itemTypeName, String itemSubTypeName, String itemBrandName, String itemMeasurementUnitType, Screen screen, int screenResolution, int currentChannel) {
+  //constructor TWO
+    public Television(String itemTypeName, String itemSubTypeName, String itemBrandName, String itemMeasurementUnitType, Screen screen, String screenResolution, int currentChannel) {
         this(itemTypeName, itemSubTypeName, itemBrandName, itemMeasurementUnitType);
         // TODO Auto-generated constructor stub
-        this.tvsCount++;
+        //this.tvsCount++; //because you have used this Constructor call to run constructor ONE, dont increment here
         this.screen = screen;
         this.screenResolution = screenResolution;
         this.currentChannel = currentChannel;

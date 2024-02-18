@@ -19,4 +19,9 @@ public class Screen {
     public void setScreenID(int screenID) {
         this.screenID = screenID;
     }
+    
+    public Screen(String screenType, int screenID) {
+        this.screenType = screenType;
+        this.screenID = screenID;
+    }
 }
