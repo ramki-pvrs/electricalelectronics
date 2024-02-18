@@ -141,7 +141,7 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
    
 - In a Simple way, the interface contains multiple abstract methods, so write the implementation in implementation classes. If the implementation is unable to provide an implementation of all abstract methods, then declare the implementation class with an abstract modifier, and complete the remaining method implementation in the next created child classes. It is possible to declare multiple child classes but at final we have completed the implementation of all abstract methods.  
 
-- **JDK 9**: interfaces can contain the following also Static Methods; Private Methods; Private Statis Methods 
+- **JDK 9**: interfaces can contain the following also Static Methods; Private Methods; Private Static Methods 
 
 
 ## Association, Composition, Aggregation 
