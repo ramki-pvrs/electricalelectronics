@@ -11,11 +11,10 @@ public class MainEntryClass {
         
         List<String> brands = java.util.List.of("Panasonic", "LG", "Samsung", "Sony", "Redmi", "OnePlus", "Acer");
         
-        
         //https://www.baeldung.com/java-enum-values
 
         System.out.println(ItemType.E1.type);
-        System.out.println(ItemType.E2.type);
+        System.out.println(ItemType.TV.type);
         System.out.println(ItemType.valueOf("E1"));
 
     }

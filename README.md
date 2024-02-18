@@ -1,5 +1,8 @@
 # References Used  
-- https://github.com/ramki-pvrs/electricalelectronics/blob/main/README.md
+- https://github.com/ramki-pvrs/electricalelectronics/blob/main/README.md 
+- https://www.scaler.com/topics/association-composition-and-aggregation-in-java/ 
+- https://www.oracle.com/java/technologies/java-base-system-libraries.html 
+- https://docs.oracle.com/javase/tutorial/essential/concurrency/procthread.html
 
 
 
@@ -7,6 +10,8 @@
 
 ## Keywords  
 - Class, Object, Attribute, Method, Constructor, Access Modifier, Non-Access Modifier, Interface, Association, Composition, Aggregation  
+- **super** and **super()**: 1. to refer immediate parent class instance variable super.xyz; 2. invoke immediate parent class method super.doSome() 3. super() to invoke immediate parent class constructor
+- **this** and **this()**:  1. refers to current instance this.<something>; can be used as first line in constructor to run this(zero or more args)
 - Concurrency, Process, Thread  
     -- Producer/Consumer 
     -- Runnable (run, obj.start(task), no waiting on response)  
@@ -24,7 +29,8 @@
 - Inheritance: Sub-class extending Parent Class
 - Polymorphism:
    -- Compile Time Polymorphism (Early Binding): Method Overloading - same method name but different number of args or different type of args
-   -- Run Time Polymorphism (Late Binding): Method Overriding - sub-class over-riding parent class  
+   -- Run Time Polymorphism (Late Binding): Method Overriding - sub-class method over-riding parent class method 
+      -- method signature (name, parameters, and return type) should be same but implementation can be different
    
 ## Randoms  
 - As Grady Booch put it, "An object has state, behavior, and identity"  
@@ -70,13 +76,17 @@
 ## Non-access Modifiers  
 - They are used with classes, methods, variables, constructors, etc to provide information about their behavior to JVM  
 - **static**: memory management; apply to variables, methods, blocks, and nested classes  
-    -- belongs to a class and not objects  
-    -- objects can use static variables methods   
+    -- belongs to a class and not objects
+    -- objects can use static variables and methods   
     -- object methods can use static variables but static methods (class methods) cannot use object variables  
-    -- static methods can be overloaded but not over-ridden
+    -- static methods can be overloaded but not over-ridden 
+    -- can be public or private; if private can only be used inside class (increment serial number inside object constructor??) 
+    -- https://stackoverflow.com/questions/7279887/what-is-the-use-of-a-private-static-variable-in-java
 - **final**: applicable only to a variable, a method, or a class. It is used to restrict a user in Java  
    -- if applied to a class, that class cannot be extended  
    -- if applied to a method, that method cannot be over-ridden  
+   -- if applied to a variable (attribute) it cannot be changed during course of the program execution once initialized 
+        -- need to be initialized on declaration or in constructor of the class
 - **synchronized**: Java Synchronization is used to make sure by some synchronization method that only one thread can access the resource at a given point in time.  
    -- Java provides a way of creating threads and synchronizing their tasks using synchronized blocks  
 - **transient**:  used in serialization; at the time of serialization if we are not storing the variable value persistent, we use transient keyword  
@@ -106,8 +116,11 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
 - Constructors are used to initialize the objects after they are created
 - JVM provides default constructor without any args  
 - Constructors can be overloaded - different number of args or different types of args makes them overloaded 
-- Constructor chaining possible  
-- super keyword 
+- Constructor chaining possible  - use constructor call super() or this() as first line in constructor; not both
+- **super** keyword inside constructor as first line, makes parent constructor to be run
+- **this** keyword inside constructor as first line, makes this class constructor to be run; either super or this only and not both 
+   -- At the beginning of a constructor, you can call a different constructor of the same class by using this(parameter_1, ... parameter_n); as first instruction
+
 
     
 
@@ -128,7 +141,27 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
    
 - In a Simple way, the interface contains multiple abstract methods, so write the implementation in implementation classes. If the implementation is unable to provide an implementation of all abstract methods, then declare the implementation class with an abstract modifier, and complete the remaining method implementation in the next created child classes. It is possible to declare multiple child classes but at final we have completed the implementation of all abstract methods.  
 
-- **JDK 9**: interfaces can contain the following also Static Methods; Private Methods; Private Statis Methods
+- **JDK 9**: interfaces can contain the following also Static Methods; Private Methods; Private Statis Methods 
+
+
+## Association, Composition, Aggregation 
+- A class can have a **"has-a" relationship** of objects from unrelated classes in Java. This is called association.
+Association is a relationship between two classes where one class uses the other class. 
+The two classes are unrelated, each can exist without the other one. 
+Association can be a one-to-one, one-to-many, many-to-one, or many-to-many relationship.
+
+Two types of Association : Composition and Aggregation
+
+Aggregation: related objects can exist independently with "has a" relationship
+Composition: tight coupling: "has a" relationship, better way is to say "belongs to" relationship; one cannot exist without the other
+the objects’ life-cycles are tied. It means that if we destroy the owner object, its members also will be destroyed with it.
+e.g. if library is destroyed all books in it are destroyed
+
+in our ElectricalElectronics project, for example screen belongs to TV, 
+if TV is destroyed that specific screen has no meaning by itself and it looses its existence
+
+Note: you cannot say screen is a TV or TV is a screen, so no "is a" relation so no inheritance here but only association
+Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relation; one TV one Screen
 
 
 
