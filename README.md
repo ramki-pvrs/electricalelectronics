@@ -131,7 +131,7 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
 - while class is a blue-print of an object state(attributes and methods), interface is blue-print of object behavior (only methods)  
    -- Java supports only single inheritance but multiple interface implementations
 - interface can contain attributes and only method definitions (methods are not implemented)  
-- all methods are public  
+- all methods are public abstract
 - all attributes are public static final (that means they cannot be changed; can only be used)  
 - an interface can extend another interface and a class which implements this interface chain should implement all methods of interfaces from the chain  
 - **JDK 8**:  
