@@ -192,7 +192,7 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
    -- do we wait for results from task execution or not (callable or runnable) 
    
 - **Thread Life Cycle : States**: New, (Runnable, Running), Blocked, Waiting, Timed Waiting, Terminated 
-- A thread state. A thread can be in one of the following states: 
+- A thread state. A thread can be in one of the following states  
    -- **NEW**: A thread that has not yet started is in this state 
    -- **RUNNABLE**: A thread executing in the Java virtual machine is in this state 
    -- **BLOCKED**: A thread that is blocked waiting for a monitor lock is in this state 
