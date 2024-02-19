@@ -5,10 +5,13 @@ public class Television extends Electronics implements BuyerMethods {
     public static int tvsCount = 0;
     
     //association relation - Composition in specific - tight coupling; Screen Belongs to TV
+    private int tvSerialNumber;
     private Screen screen;
     private String screenResolution;
     private int currentChannel; 
     private boolean tvON; 
+    
+    
 
     public boolean isTvON() {
         return tvON;
@@ -46,6 +49,7 @@ public class Television extends Electronics implements BuyerMethods {
     public Television(String itemTypeName, String itemSubTypeName, String itemBrandName, String itemMeasurementUnitType) {
         super(itemTypeName, itemSubTypeName, itemBrandName, itemMeasurementUnitType);
         this.tvsCount++;
+        this.tvSerialNumber++;
     }
     
   //constructor TWO
@@ -63,24 +67,7 @@ public class Television extends Electronics implements BuyerMethods {
         // return some random value
         return (float) ((Math.random() * (2000000 - 20000)) + 20000);
     }
-
-    @Override
-    public int placeOrder(String itemMeasurementUnitType, int unitPrice, int requiredQuantity) {
-        // for testing, return some random number as order number
-        return (int) ((Math.random() * (1000000 - 10000)) + 10000);
-    }
-
-    @Override
-    public String cancelOrder(int orderNumber) {
-        
-        return "Cancelled order " + orderNumber;
-    }
-
-    @Override
-    public int getOrderValue(int orderNumber) {
-        // return some random value
-        return (int) ((Math.random() * (2000000 - 20000)) + 20000);
-    }
+    
 
     @Override
     public int calculateProductionCost(String itemMeasurementUnitType, int productionQuantity, int unitCost) {
@@ -102,6 +89,18 @@ public class Television extends Electronics implements BuyerMethods {
         this.setCurrentChannel(-1); //on switching off, setting the current channel to -1, assuming -1 is invalid channel; 
         //order matters here; first setCurrentChannel and then setMyOnStatus
         this.setMyOnStatus(false);
+    }
+
+    @Override
+    public int buySingleItem(String itemMeasurementUnitType, String itemType, String itemBrand) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public String returnSingleItem(int itemNumber) {
+        // TODO Auto-generated method stub
+        return "Item with serial number " + itemNumber + " returned.";
     }
 
 }

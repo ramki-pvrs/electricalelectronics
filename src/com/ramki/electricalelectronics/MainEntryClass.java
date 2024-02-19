@@ -1,7 +1,10 @@
 package com.ramki.electricalelectronics;
 
+import java.time.Year;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class MainEntryClass {
 
@@ -74,8 +77,37 @@ public class MainEntryClass {
             System.out.println("TV objects count = " + Television.tvsCount); //tv1, tv2 and 100 tv objects in tvObjsList
             
             
+            //Association: Composition
+            ElectronicsStore rtnagar_store = new ElectronicsStore("RT Nagar Store", "Bangalore");
+            Set<Television> televisions = new HashSet<>();
+            televisions.add(tv1);
+            televisions.add(tv2);
+            for(int i = 0; i < tvObjsList.length; i++) {
+                televisions.add(tvObjsList[i]);
+            }
+            
+            //one store may have many televisions - so one to many relation 
+            //uni-directional association; Store has a TVs, not the other way round (TV does not "has a" store)
+            rtnagar_store.setTelevisions(televisions);
+            System.out.println("Association Composition televisions in store = " + rtnagar_store.getTelevisions());
+            //[com.ramki.electricalelectronicsproject.Television@edf4efb, com.ramki.electricalelectronicsproject.Television@566776ad, com.ramki.electricalelectronicsproject.Television@2f7a2457]
+
             
         System.out.println("END OOPS ======================================================");
+        
+        System.out.println("START Interfaces ======================================================");
+        
+        int currentYear = Year.now().getValue();
+        System.out.println("Current Year = " + currentYear);
+        
+        //using interface static method without object reference
+        //placeOrder(String itemMeasurementUnitType, String itemSubType, int unitPrice, int requiredQuantity)
+        int tvOrder1 = BuyerMethods.placeOrder("Count", "TV", 1000, 50);
+        
+        System.out.println("tvOrder1 Order Number = " + tvOrder1);
+        
+        
+        System.out.println("END Interfaces ======================================================");
 
     }
 

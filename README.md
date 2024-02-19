@@ -132,7 +132,7 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
    -- Java supports only single inheritance but multiple interface implementations
 - interface can contain attributes and only method definitions (methods are not implemented)  
 - all methods are public  
-- all attributes are public static final (that means they cannot be changed; only can be used)  
+- all attributes are public static final (that means they cannot be changed; can only be used)  
 - an interface can extend another interface and a class which implements this interface chain should implement all methods of interfaces from the chain  
 - **JDK 8**:  
    -- interface can contain default implementation for methods  
@@ -161,14 +161,57 @@ in our ElectricalElectronics project, for example screen belongs to TV,
 if TV is destroyed that specific screen has no meaning by itself and it looses its existence
 
 Note: you cannot say screen is a TV or TV is a screen, so no "is a" relation so no inheritance here but only association
-Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relation; one TV one Screen
+Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relation; one TV one Screen 
+
+- **Composition** is a strong type of "has-a" relationship because the containing object is its owner. So, objects are tightly coupled, which means if we delete the parent object, the child object will also get deleted with it. School has a class room and if School is not there that class room is not there; class room belongs to that school  
+- **Aggregation**, objects are not tightly coupled or don't involve owning. All the objects are independent of each other and can exist even if the parent object gets deleted 
+   -- A car comes with a wheel, and if we take off its wheels, the wheels will still exist. But a car without wheels won't be as useful as a car with its wheels 
+   -- and that's how this relationship existed in the first place for assembling the parts to a bigger construct, **which is capable of more things than its parts**
 
 
 
 
-# Java Concurrency
+# Java Concurrency 
+- **Concurrency and Parallelism**: illusion of multiple tasks running in parallel is Concurrency (time-slicing and context switching); multiple tasks running in parallel in real is Parallelism
+- **Process and Thread**: Process is independent and Thread(s) is/are sub-set of process; CPU actually executes a thread and not a process 
+   -- Process has its own PID, memory, call stack, 
+   -- Thread uses process memory but has its own call stack
+   --Single Core CPU based machines also can run multiple threads and processes  
+       -- difference between single core and multi core is whether in parallel can we run multiple tasks without context switching 
+- https://stackoverflow.com/questions/3042717/what-is-the-difference-between-a-thread-process-task  
+
+- **think in terms of tasks and not threads**  
+   -- analyse your requirements; can you break it down into multiple tasks  
+   -- whether each task can run concurrently  
+   -- dependencies between tasks  
+   -- do the tasks manipulate shared data (same data) 
+      -- do they need to do it sequential 
+      -- or is there a possibility during runtime they will try read/write shared data at the same time (critical section)
+   -- does one task need to call another task 
+      -- does calling task need to wait on called task or it can terminate independently (.join())
+   -- do we wait for results from task execution or not (callable or runnable) 
+   
+- **Thread Life Cycle : States**: New, (Runnable, Running), Blocked, Waiting, Timed Waiting, Terminated 
+- A thread state. A thread can be in one of the following states:
+NEW
+A thread that has not yet started is in this state.
+RUNNABLE
+A thread executing in the Java virtual machine is in this state.
+BLOCKED
+A thread that is blocked waiting for a monitor lock is in this state.
+WAITING
+A thread that is waiting indefinitely for another thread to perform a particular action is in this state.
+TIMED_WAITING
+A thread that is waiting for another thread to perform an action for up to a specified waiting time is in this state.
+TERMINATED
+A thread that has exited is in this state.
 
 
-# SOLID - basic coding style
+**A thread can be in only one state at a given point in time. These states are virtual machine states which do not reflect any operating system thread states.**
+    
+
+
+
+# SOLID PRINCIPLES - basic coding style
 
 
