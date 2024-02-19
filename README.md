@@ -56,7 +56,7 @@
 - https://programming.guide/java/when-to-create-a-final-class.html  
 
 
-## Final Classes, Methods and Variables  
+### Final Classes, Methods and Variables  
 - In java final variables can't reassign, final classes can't extends and final methods can't override  
 - As Grady Booch put it, "An object has state, behavior, and identity". 
    -- While we can't change an object's identity once its reference has been marked as final, we do have a chance to change its state by assigning new values to its non-final fields (provided, of course, it has them.)  
@@ -201,7 +201,9 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
    -- **TERMINATED**: A thread that has exited is in this state.
 
 
-**A thread can be in only one state at a given point in time. These states are virtual machine states which do not reflect any operating system thread states.**
+**A thread can be in only one state at a given point in time. These states are virtual machine states which do not reflect any operating system thread states.**  
+
+### Java Thread Program Concepts
     
 
 
