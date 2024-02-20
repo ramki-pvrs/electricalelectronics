@@ -172,6 +172,8 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 
 
 # Java Concurrency 
+-- https://medium.com/@codecraftclub/simplifying-java-multithreading-runnable-interface-with-a-construction-analogy-56852d7c3df0  
+-- https://jenkov.com/tutorials/java-concurrency/creating-and-starting-threads.html
 - **Concurrency and Parallelism**: illusion of multiple tasks running in parallel is Concurrency (time-slicing and context switching); multiple tasks running in parallel in real is Parallelism
 - **Process and Thread**: Process is independent and Thread(s) is/are sub-set of process; CPU actually executes a thread and not a process 
    -- Process has its own PID, memory, call stack, 
@@ -203,7 +205,17 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 
 **A thread can be in only one state at a given point in time. These states are virtual machine states which do not reflect any operating system thread states.**  
 
-### Java Thread Program Concepts
+### Java Thread Program Concepts using Runnable interface
+- your myClass implements Runnable interface  
+   -- Runnable interface has run method which is implemented in myClass; (start() the run)  
+   -- create myClassObj1
+- create Thread class object thread1; Thread class provided by core  
+   -- pass myClassObj1 to therad1 object as constructor parameter
+   -- thread1.start() executes myClasObj1 run method internally
+- typically it is create tasks, create threads add tasks to threads and load them up separately to some executors  
+   -- executors manage the execution of the threads, sync, shared data handling, thread pool and all
+
+
     
 
 
