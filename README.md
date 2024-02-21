@@ -35,7 +35,30 @@
 ## Randoms  
 - As Grady Booch put it, "An object has state, behavior, and identity"  
 - Abstraction and Encapsulation both hides something; Abstraction hides implementation and Encapsulation hides object data and methods  
-   -- to access hidden data, you have to use getters and to update hidden data use setters (another name is accessors and mutators)
+   -- to access hidden data, you have to use getters and to update hidden data use setters (another name is accessors and mutators)  
+- SOLID: remember if you are not supposed to do something in/with an object (class), you should not even have that method (behavior) in that class  
+   -- for example fly method in birds class because some birds cannot fly  
+-- **class loading**: https://www.geeksforgeeks.org/what-is-class-loading-and-static-blocks-in-java/  
+-- https://www.javatpoint.com/classloader-in-java  
+-- Class Loading is the process of storing the class-specific information in the memory. Class-specific information means, information about the class members, i.e., variables and methods. It is just like that before firing a bullet, first, we need to load the bullet into the pistol. Similarly, to use a class first we need to load it by a class loader. Static block runs only once in the life of a class. It can only access the static members and will only belong to the class.
+
+Static Block is just like any block of code beginning with a ‘static’ keyword is a static block. Static is a keyword which when attached to the method, variable, Block makes it Class method, class variable, and class Block. You can call a static variable/method using ClassName. JVM executes the static block at “CLASS LOADING TIME”.
+
+Execution Order: For every static block, there is an order in which static block/method/variable gets initialized. 
+
+Static Block
+Static Variable
+Static Method
+
+Illustration: Showcasing generic execution of that static block is supposed to happen with series of steps as mentioned.
+
+Randomly considering a java file ‘File.java’, having a static block in it is followed by a series of steps as mentioned.
+Compilation of java file.
+Execution of java file.
+Java virtual machine JVM is calling main method in the program.
+Class is loaded and all the necessary information is stored in memory by now.
+Execution of static block begins.  
+- ============================================================================================
  
 
 ## Abstract Classes
@@ -220,6 +243,82 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 
 
 
-# SOLID PRINCIPLES - basic coding style
+# SOLID PRINCIPLES - basic coding style  
+
+# Design Patterns 
+- https://dzone.com/articles/java-singletons-using-enum 
+- https://refactoring.guru/design-patterns/singleton 
+- https://staff.cs.utu.fi/~jounsmed/doos_06/material/DesignPrinciplesAndPatterns.pdf 
+
+- 
+- Shared Vocabulary (problems at creation of objects)
+- **Types of Design Patterns : 1. Creational 2. Structural 3. Behavioural** 
+## Creational Design Patterns:  creation of objects  
+- problems at the creation of objects 
+- Singleton  - rarely used in normal dev scenarios  
+   -- create class and instantiate only one object; user should not be able to create more than one  
+   -- may be shared resources scenario where you dont want more than one object of same class (type) as shared resource  
+   -- dB connection object; if constructor is available, no one can stop me from creating object  
+   -- so restrict constructor access; private constructor - which means you can call it only inside **DBConn class**
+   -- then getInstance method inside class DBConn { 
+       **private static DBConn dbconn1 = null**; 
+       //create a DBConn obj inside; if it is null create new one; else; return already created on new creation request
+       //static dbconn1 will be accessed in static getInstance() method
+       
+      private DBConn(); //**PRIVATE CONSTRUCTOR**;
+      //private constructor means not available for object instantiation outside class (new DBConn() is not possible)
+     public static getInstance() { 
+     
+          if(dbconn1 == null) {
+          		return new dbconn(); 
+          } else {
+          return dbconn1;
+          }
+       		
+        } 
+        
+      } 
+      
+      with above logic DBConn.getInstance(); will always have only one connection object
+   -- private constructor means, I am not allowing anyone else to create the object outside of me
+   -- static getInstance() method means can be accessed only by class DBConn
+   -- also if already created dbconn1 obj is present, I am not creating another one but returning existing object  
+   
+   -- IS the above dbconn logic thread safe? **NOT THERAD SAFE**  
+      -- two threads calling getInstance() at the same time and seeing dbconn1 null may create two dbconn objects which is not what you wanted; Race Condition - Sync issue  
+      
+      -- METHOD 1 FIX: private static DBConn dbconn1 = new DBConn(); 
+      //when class is loaded dbconn1 is initialised; we remove if(dbconn1 == null) check in above code block  
+      // so even if multiple threads all of them will return the same object; threads are not even checking for dbconn1 object presence  
+      -- METHOD 2 FIX: 
+       1. lets say I dont want to increase my class loading time;  
+       2. what if I want to pass dbconn params only on run time and not on class loading (which happens when APP is started) 
+       -- METHOD 2 FIX: public static synchromised getInstance() {} will slow down because once first obj is created after that there is no critical section but threads will keep checking sync; 100 threads can directly use the obj because it is already created but synchronised key word on getInstance method will not allow it, it will keep checking
+        -- FIX 2: use locks; DOES NOT SOLVE SYNC issue; more worse if you add lock() my-getInstance-codeblock unlock(); 
+        -- **FINAL SOLN FOR SINGLETON DOUBLE LOCK**: you are in airport; get into toilet when it was free but you comeout for quick phone pick-up and you goback to the same toilet; but still you will knock before entering
+        public static getInstance() {  //MAKE It public
+        -- if(dbconn1 == null) {
+       	 	lock();
+        	if(dbconn1 == null) { //Double checking
+        		db1conn = new DBConn();
+        		unlock();
+        	}
+        } 
+      -- SYNC issue solved; thread1 locks  and creates dbconn1 created; second therad comes in but 2nd null check will fail so directly return dbconn1 obj;
+- Registry 
+- Prototype 
+- Factory 
+- Builder  
+    
+## Structural  
+- Adapter  
+- Facade 
+- Decorator  
+- Flyweight  
+  
+## Behavioral  
+- Observer 
+- Strategy 
+- Command (Case Studies - splitwise)
 
 
