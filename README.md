@@ -36,6 +36,7 @@
 - As Grady Booch put it, "An object has state, behavior, and identity"  
 - Abstraction and Encapsulation both hides something; Abstraction hides implementation and Encapsulation hides object data and methods  
    -- to access hidden data, you have to use getters and to update hidden data use setters (another name is accessors and mutators)  
+- setters comes into picture afer object is created
 - SOLID: remember if you are not supposed to do something in/with an object (class), you should not even have that method (behavior) in that class  
    -- for example fly method in birds class because some birds cannot fly  
 -- **class loading**: https://www.geeksforgeeks.org/what-is-class-loading-and-static-blocks-in-java/  
@@ -139,7 +140,7 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
 - Constructors are used to initialize the objects after they are created
 - JVM provides default constructor without any args  
 - Constructors can be overloaded - different number of args or different types of args makes them overloaded 
-- Constructor chaining possible  - use constructor call super() or this() as first line in constructor; not both
+- Constructor chaining (telescoping of constructors) possible  - use constructor call super() or this() as first line in constructor; not both
 - **super** keyword inside constructor as first line, makes parent constructor to be run
 - **this** keyword inside constructor as first line, makes this class constructor to be run; either super or this only and not both 
    -- At the beginning of a constructor, you can call a different constructor of the same class by using this(parameter_1, ... parameter_n); as first instruction
@@ -308,7 +309,20 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 - Registry 
 - Prototype 
 - Factory 
-- Builder  
+- **Builder** 
+  - only for class with lot of attributes and different type of attributes (int, String....)  
+  - inheritance of different house types wodden, concrete, glass OR  
+  - different parameterized constructors 2 params, 5 params, 100 params... for different config of a house or student class (object)  
+  - **if you have lot of attributes, may be all the time you dont need all the attributes to create an object**  
+  - may be setters (but not greate solution); setters comes into picture after object is created; now I am leaving the decision to the user of the object after it is created; not good
+  - now try Builder design pattern  (consider it as alternative solution)  
+   -- certain values for certain keys (attributes) - HashMap
+   Map <String, Object> m;
+   m.add("naeam" 12); user can pass wrong name or value; no control
+   -- I need something like a map key-value pair; I need type checking on values; I need keys fixed; I need some check on keys as well;  
+   -- which is then not HashMap but class; so you can have attributes as keys and data type to make sure values are of only allowed data types for those keys (attributes)
+   -- so create a Helper class with same attributes of Student class and pass that Helper object h as the Constructor param in Student object s; this means in Student constructor you can apply all the validations before creating the student object
+   
     
 ## Structural  
 - Adapter  
