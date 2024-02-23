@@ -229,6 +229,18 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 
 **A thread can be in only one state at a given point in time. These states are virtual machine states which do not reflect any operating system thread states.**  
 
+### Java Threading - two ways  
+- Extending Thread Class  
+   -- public myClass extends Thread  
+   -- not preferred approach
+- Implementing Runnable Interface  
+  -- public myClass implements Runnable  
+  -- preferred approach  because 
+     -- once extended Thread you cannot extend any other parent class from your app  
+     -- more importantly Runnable/Callable are having more control the way you want to be executing your threads and thread pool and separate management of creation and execution of threads
+
+
+
 ### Java Thread Program Concepts using Runnable interface
 - your myClass implements Runnable interface  
    -- Runnable interface has run method which is implemented in myClass; (start() the run)  
@@ -238,11 +250,6 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
    -- thread1.start() executes myClasObj1 run method internally
 - typically it is create tasks, create threads add tasks to threads and load them up separately to some executors  
    -- executors manage the execution of the threads, sync, shared data handling, thread pool and all
-
-
-    
-
-
 
 # SOLID PRINCIPLES - basic coding style  
 
