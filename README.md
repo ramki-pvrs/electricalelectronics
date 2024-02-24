@@ -18,6 +18,7 @@
     -- Callable (call, obj.submit(task), future, obj.get() get the response)  
     -- volatile  
     -- thread_t2.join(); thread t1 calls t2 and when t2 says t2.join(), t1 is waiting for t2 to complete  
+    -- Executor, ExecutorService, Future, 
 - 
 
 ## Abstraction, Encapsulation, Inheritance, Polymorphism (many forms)
@@ -136,14 +137,28 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
    -- The methods which are implemented in C, C++ are called native methods or foreign methods.  
    
 ## Constructors  
-- Constructor name is same as Class name
+- Constructor name is same as Class name; 1. Default Constructor 2. Parameterized Constructor 3. Copy Constructor
 - Constructors are used to initialize the objects after they are created
 - JVM provides default constructor without any args  
 - Constructors can be overloaded - different number of args or different types of args makes them overloaded 
 - Constructor chaining (telescoping of constructors) possible  - use constructor call super() or this() as first line in constructor; not both
 - **super** keyword inside constructor as first line, makes parent constructor to be run
 - **this** keyword inside constructor as first line, makes this class constructor to be run; either super or this only and not both 
-   -- At the beginning of a constructor, you can call a different constructor of the same class by using this(parameter_1, ... parameter_n); as first instruction
+   -- At the beginning of a constructor, you can call a different constructor of the same class by using this(parameter_1, ... parameter_n); as first instruction 
+### Copy constructor  
+- you have to write it; no default copy constructor; shallow copy; deep copy  
+   -- primitive values are easily copied  
+   -- when it is objects (a list for example) as constructor params, shallow copy will only copy the reference pointer not the actual values; you need deep copy 
+   -- to create an exact copy of an existing object of the class. There is also a condition, if we have made any changes in the copy it should not reflect in the original one and vice-versa. For such cases, Java provides the concept of a copy constructor.
+   -- https://www.geeksforgeeks.org/copy-constructor-in-java/  
+   -- Here’s a basic algorithm for implementing a copy constructor in Java: 
+   1. Define a class: Create a class that represents the object you want to manage. 
+   2. Define instance variables: Within the class, define instance variables that represent the data you want to manage. 
+   3. Define a constructor: Define a constructor for the class that takes an instance of the same class as its argument. This constructor will be used to create a copy of the object. 
+   4. Initialize the instance variables: Within the constructor, initialize the instance variables with the values from the argument object. 
+   5. Use the this keyword to refer to the instance variables: To refer to the instance variables of the class within the constructor, use the this keyword.
+   6. Check for null values: If the argument object is null, return a new instance of the class with default values for the instance variables. 
+   7. Implement deep copying: If the instance variables are objects, create new instances of those objects within the constructor and initialize them with the values from the argument object. This is called deep copying and ensures that changes to the copied object do not affect the original object.
 
 
     
@@ -244,12 +259,15 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 ### Java Thread Program Concepts using Runnable interface
 - your myClass implements Runnable interface  
    -- Runnable interface has run method which is implemented in myClass; (start() the run)  
+   -- java.lang.Runnable is an interface that is to be implemented by a class whose instances are intended to be executed by a thread
    -- create myClassObj1
 - create Thread class object thread1; Thread class provided by core  
    -- pass myClassObj1 to therad1 object as constructor parameter
    -- thread1.start() executes myClasObj1 run method internally
 - typically it is create tasks, create threads add tasks to threads and load them up separately to some executors  
-   -- executors manage the execution of the threads, sync, shared data handling, thread pool and all
+   -- executors manage the execution of the threads, sync, shared data handling, thread pool and all 
+- **Runnable**: represents the code to be executed
+- **Executor**: and its subclasses represent execution strategies. Consumes Runnable (task); sophisticated tools and Thread Pools, Future
 
 # SOLID PRINCIPLES - basic coding style  
 
