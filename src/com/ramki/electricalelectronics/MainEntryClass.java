@@ -25,6 +25,8 @@ public class MainEntryClass {
         System.out.println(ItemType.TV.type);
         System.out.println(ItemType.valueOf("E1"));
         
+         
+        
         
         //Java 9: use interface static method directly without object association
         System.out.println(ConvertCurrency.getUSDValue(100));
@@ -33,11 +35,13 @@ public class MainEntryClass {
             //Television(String itemTypeName, String itemSubTypeName, String itemBrandName, String itemMeasurementUnitType)
             Television tv1 = new Television("Electronics", "TV", "Panasonic", "Count");
             //Television(String itemTypeName, String itemSubTypeName, String itemBrandName, String itemMeasurementUnitType, Screen screen, String screenResolution, int currentChannel)
-            Screen screen1 = new Screen("LED", 1000);
-            Television tv2 = new Television("Electronics", "TV", "Panasonic", "Count", screen1, "OLED", -1);
+            Screen screen2 = new Screen("LED", 1000);
+            Television tv2 = new Television("Electronics", "TV", "Panasonic", "Count", screen2, "OLED", -1);
             
             System.out.println("tv1 screenResolution = " + tv1.getScreenResolution()); //null because screen resolution is not in params for tv1; 
             System.out.println("tv2 screenResolution = " + tv2.getScreenResolution());
+            
+            System.out.println("screen2 screen type = " + screen2.getScreenType());
             
             System.out.println("BEFORE setTvON: tv2 on status = " + tv2.isTvON());
             tv2.setTvON(true);
@@ -48,8 +52,16 @@ public class MainEntryClass {
             
             //System.out.println("Random brand name = " + randBrand);
             
+          //COPY CONSTRUCTOR; create new TV object using already created tv object
+            
+            Television tv3 = new Television(tv2, 1002);
+            //DO NOT FORGET getScreen() to get Screen properties
+            System.out.println("Orig tv object test; get screen type = " + tv2.getScreen().getScreenType());
+            System.out.println("Targt tv object test; get screen type = " + tv3.getScreen().getScreenType());
+            
+            
             //Create array of objects
-            int sizeOfTVObjList = 100;
+            int sizeOfTVObjList = 5;
             Screen screenObjList[] = new Screen[sizeOfTVObjList];
             Television tvObjsList[] = new Television[sizeOfTVObjList];
             
@@ -91,6 +103,11 @@ public class MainEntryClass {
             rtnagar_store.setTelevisions(televisions);
             System.out.println("Association Composition televisions in store = " + rtnagar_store.getTelevisions());
             //[com.ramki.electricalelectronicsproject.Television@edf4efb, com.ramki.electricalelectronicsproject.Television@566776ad, com.ramki.electricalelectronicsproject.Television@2f7a2457]
+            
+            
+            
+            
+            
 
             
         System.out.println("END OOPS ======================================================");

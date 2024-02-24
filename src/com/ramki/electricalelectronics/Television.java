@@ -61,6 +61,17 @@ public class Television extends Electronics implements BuyerMethods {
         this.screenResolution = screenResolution;
         this.currentChannel = currentChannel;
     }
+    
+    //deep copy constructor because Screen is an object type attribute and requires new object inside this constructor
+    //observe Television tvObj is passed as constructor parameter
+    //this here refers to the target TV object getting copied from source "origTVObj"
+    public Television(Television origTVObj, int newScreenID) {
+        this(origTVObj.getItemType(), origTVObj.getItemSubType(), origTVObj.getBrandName(), origTVObj.getItemMeasurementUnitType());
+        Screen newScreen = new Screen(origTVObj.getScreen().getScreenType(), newScreenID); //for deep copy, you need a new Screen object; DO NOT FORGET getScreen() in origTVObj to get Screen properties
+        this.screen = newScreen;
+        this.screenResolution = origTVObj.getScreenResolution();
+        this.currentChannel = -1;
+    }
 
     @Override
     public float getOrderValue(int orderNumber, int multiplyRupeeFactor) {

@@ -9,6 +9,7 @@
 # Java Basics  
 
 ## Keywords  
+- Abstraction, Encapsulation, Inheritance, Polymorphism
 - Class, Object, Attribute, Method, Constructor, Access Modifier, Non-Access Modifier, Interface, Association, Composition, Aggregation  
 - **super** and **super()**: 1. to refer immediate parent class instance variable super.xyz; 2. invoke immediate parent class method super.doSome() 3. super() to invoke immediate parent class constructor
 - **this** and **this()**:  1. refers to current instance this.<something>; can be used as first line in constructor to run this(zero or more args)
@@ -29,7 +30,7 @@
     -- Encapsulation is used to provide privacy and maintain control over transparency of data(getters and setters (accessor and mutator); immutable objects)
 - Inheritance: Sub-class extending Parent Class
 - Polymorphism:
-   -- Compile Time Polymorphism (Early Binding): Method Overloading - same method name but different number of args or different type of args
+   -- Compile Time Polymorphism (Early Binding): Method Overloading - same method name but different number of args or different types of args
    -- Run Time Polymorphism (Late Binding): Method Overriding - sub-class method over-riding parent class method 
       -- method signature (name, parameters, and return type) should be same but implementation can be different
    
@@ -158,7 +159,8 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
    4. Initialize the instance variables: Within the constructor, initialize the instance variables with the values from the argument object. 
    5. Use the this keyword to refer to the instance variables: To refer to the instance variables of the class within the constructor, use the this keyword.
    6. Check for null values: If the argument object is null, return a new instance of the class with default values for the instance variables. 
-   7. Implement deep copying: If the instance variables are objects, create new instances of those objects within the constructor and initialize them with the values from the argument object. This is called deep copying and ensures that changes to the copied object do not affect the original object.
+   7. Implement deep copying: If the instance variables are objects, create new instances of those objects within the constructor and initialize them with the values from the argument object. This is called deep copying and ensures that changes to the copied object do not affect the original object. 
+- better that cloning because in clone(), you need to Cloneable should be imported; we cannot assign values if original object attributes are final; clone() return should be typecasted. 
 
 
     
