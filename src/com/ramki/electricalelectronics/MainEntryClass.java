@@ -135,11 +135,11 @@ public class MainEntryClass {
         //the task is set the currentChannel to 402 in all of them, get the currentChannel and check it is 402
         
         
-        TestTVByExtendingThread testTV1 = new TestTVByExtendingThread(tv1, 402, 0);
+        TestTVByExtendingThread testTV1 = new TestTVByExtendingThread(tv1, 0);
         testTV1.start();
         
         for(int i = 0; i < tvObjsList.length; i++) {            
-            TestTVByExtendingThread testTV = new TestTVByExtendingThread(tvObjsList[i], 402, i);
+            TestTVByExtendingThread testTV = new TestTVByExtendingThread(tvObjsList[i], i);
             testTV.start();
         }
         
@@ -149,7 +149,7 @@ public class MainEntryClass {
         System.out.println("START implements Runnable ======================================================");
         
         for(int i = 0; i < tvObjsList.length; i++) {            
-            TestTVByImplementingRunnable testTV2 = new TestTVByImplementingRunnable(tvObjsList[i], 403, i);
+            TestTVByImplementingRunnable testTV2 = new TestTVByImplementingRunnable(tvObjsList[i], i);
             Thread thread1 = new Thread(testTV2, "Test TV thread " + i); //object, threadName as string passed
             thread1.start();
             //System.out.println("Runnable thread name = " + thread1.getName());

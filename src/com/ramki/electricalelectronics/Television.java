@@ -54,9 +54,8 @@ public class Television extends Electronics implements BuyerMethods {
     
   //constructor TWO
     public Television(String itemTypeName, String itemSubTypeName, String itemBrandName, String itemMeasurementUnitType, Screen screen, String screenResolution, int currentChannel) {
-        this(itemTypeName, itemSubTypeName, itemBrandName, itemMeasurementUnitType);
-        // TODO Auto-generated constructor stub
-        //this.tvsCount++; //because you have used this Constructor call to run constructor ONE, dont increment here
+        this(itemTypeName, itemSubTypeName, itemBrandName, itemMeasurementUnitType); //calls constructor ONE
+        //this.tvsCount++; //because you have used this Constructor call to run constructor ONE, don't increment here
         this.screen = screen;
         this.screenResolution = screenResolution;
         this.currentChannel = currentChannel;

@@ -38,7 +38,7 @@
 - As Grady Booch put it, "An object has state, behavior, and identity"  
 - Abstraction and Encapsulation both hides something; Abstraction hides implementation and Encapsulation hides object data and methods  
    -- to access hidden data, you have to use getters and to update hidden data use setters (another name is accessors and mutators)  
-- setters comes into picture afer object is created
+- setters comes into picture after object is created
 - SOLID: remember if you are not supposed to do something in/with an object (class), you should not even have that method (behavior) in that class  
    -- for example fly method in birds class because some birds cannot fly  
 -- **class loading**: https://www.geeksforgeeks.org/what-is-class-loading-and-static-blocks-in-java/  
@@ -138,16 +138,18 @@ In some cases, we may only desire visibility and not atomicity. The use of synch
    -- The methods which are implemented in C, C++ are called native methods or foreign methods.  
    
 ## Constructors  
-- Constructor name is same as Class name; 1. Default Constructor 2. Parameterized Constructor 3. Copy Constructor
+- Constructor name is same as Class name; 
+- 3 types: 1. Default Constructor 2. Parameterized Constructor(s) 3. Copy Constructor(s)  (refer Television.java)
 - Constructors are used to initialize the objects after they are created
 - JVM provides default constructor without any args  
+- multiple constructors with different number of parameters or different types of parameters possible 
 - Constructors can be overloaded - different number of args or different types of args makes them overloaded 
-- Constructor chaining (telescoping of constructors) possible  - use constructor call super() or this() as first line in constructor; not both
+- Constructor chaining (telescoping of constructors) possible  - use constructor call super() or this() as first line in constructor; not both; refer Television.java
 - **super** keyword inside constructor as first line, makes parent constructor to be run
 - **this** keyword inside constructor as first line, makes this class constructor to be run; either super or this only and not both 
    -- At the beginning of a constructor, you can call a different constructor of the same class by using this(parameter_1, ... parameter_n); as first instruction 
 ### Copy constructor  
-- you have to write it; no default copy constructor; shallow copy; deep copy  
+- no default copy constructor in Java; you have to write it; shallow copy; deep copy  
    -- primitive values are easily copied  
    -- when it is objects (a list for example) as constructor params, shallow copy will only copy the reference pointer not the actual values; you need deep copy 
    -- to create an exact copy of an existing object of the class. There is also a condition, if we have made any changes in the copy it should not reflect in the original one and vice-versa. For such cases, Java provides the concept of a copy constructor.
@@ -269,7 +271,22 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 - typically it is create tasks, create threads add tasks to threads and load them up separately to some executors  
    -- executors manage the execution of the threads, sync, shared data handling, thread pool and all 
 - **Runnable**: represents the code to be executed
-- **Executor**: and its subclasses represent execution strategies. Consumes Runnable (task); sophisticated tools and Thread Pools, Future
+- **Executor**: and its subclasses represent execution strategies. Consumes Runnable (task); sophisticated tools and Thread Pools, Future 
+
+### Executor Framework 
+- https://www.geeksforgeeks.org/what-is-java-executor-framework/ 
+- java.util.concurrent.Executor JDK 5 
+- run Runnable objects using Thread Pool (Excutors framework provides factory methods to create Thread Pools) 
+  -- worker threads; Queue 
+  -- type of Java Executors 
+  1. SingleThreadExecutor 
+  2. FixedThreadPool(n)+ (fixed n number of Threads; Tasks wait in queue if all threads are busy currently)
+  3. CachedThreadPool (dynamically creates thread pool on more work load; if current thread completes its job, re-used; uses SynchronousQueue)
+  4. ScheduledExecutor  (cron job kind. run thread at scheduled interval; uses ScheduledExecutorService interface)
+  
+
+
+
 
 # SOLID PRINCIPLES - basic coding style  
 

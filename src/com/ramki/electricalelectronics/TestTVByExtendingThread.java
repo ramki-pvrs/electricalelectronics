@@ -3,14 +3,13 @@ package com.ramki.electricalelectronics;
 public class TestTVByExtendingThread extends Thread {
     
     private Television tvObj;
-    private int currentChannel;
-    private int loopIterator; //only for testing; no real meaning
+    private int newChannel;
+    private int tvObjIndex; //only for testing; no real meaning
 
-    public TestTVByExtendingThread(Television tvObj, int currentChannel, int loopIterator) {
+    public TestTVByExtendingThread(Television tvObj, int tvObjIndex) {
         super();
         this.tvObj = tvObj;
-        this.currentChannel = currentChannel;
-        this.loopIterator = loopIterator;
+        this.tvObjIndex = tvObjIndex;
     }
 
 
@@ -18,7 +17,7 @@ public class TestTVByExtendingThread extends Thread {
     public void run() {
         // TODO Auto-generated method stub
         //System.out.print("Test TV: before setting currenctChannel; currenctChannle = " + this.tvObj.getCurrentChannel() + "\n");
-        this.tvObj.setCurrentChannel(currentChannel);
+        //this.tvObj.setCurrentChannel(newChannel);
         //System.out.print("Test TV: after setting currenctChannel; currenctChannle = " + this.tvObj.getCurrentChannel() + "\n");
         
         /*
@@ -45,11 +44,12 @@ public class TestTVByExtendingThread extends Thread {
         
         try {
             Thread.sleep(100);
-            System.out.println("extends Thread loop iterator = " + this.loopIterator); //random order printed
-            if(this.tvObj.getCurrentChannel() == this.currentChannel) {
-                System.out.print("Test TV: set current channel PASSed" + "\n");
+            this.tvObj.setCurrentChannel(newChannel);
+            System.out.println("extends Thread loop iterator = " + this.tvObjIndex); //random order printed
+            if(this.tvObj.getCurrentChannel() == this.newChannel) {
+                System.out.print("Test TV by extends Thread: set current channel PASSed" + "\n");
             } else {
-                System.out.print("Test TV: set current channel FAILed" + "\n");
+                System.out.print("Test TV by extends Thread: set current channel FAILed" + "\n");
             }
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
