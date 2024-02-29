@@ -43,7 +43,7 @@ public class TestTVByExtendingThread extends Thread {
         */
         
         try {
-            Thread.sleep(100);
+            
             this.tvObj.setCurrentChannel(newChannel);
             System.out.println("extends Thread loop iterator = " + this.tvObjIndex); //random order printed
             if(this.tvObj.getCurrentChannel() == this.newChannel) {
@@ -51,6 +51,7 @@ public class TestTVByExtendingThread extends Thread {
             } else {
                 System.out.print("Test TV by extends Thread: set current channel FAILed" + "\n");
             }
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -16,9 +16,7 @@ public class TestTVByImplementingRunnable implements Runnable {
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        
         try {
-            Thread.sleep(100);
             this.tvObj.setCurrentChannel(newChannel);
             System.out.println("implements Runnable loop iterator = " + this.tvObjIndex); //random order printed
             if(this.tvObj.getCurrentChannel() == this.newChannel) {
@@ -26,6 +24,8 @@ public class TestTVByImplementingRunnable implements Runnable {
             } else {
                 System.out.print("Test TV by implements Runnable: set current channel FAILed" + "\n");
             }
+        
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
