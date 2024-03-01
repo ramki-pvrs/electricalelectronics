@@ -19,8 +19,9 @@
     -- Callable (call, obj.submit(task), future, obj.get() get the response)  
     -- volatile  
     -- thread_t2.join(); thread t1 calls t2 and when t2 says t2.join(), t1 is waiting for t2 to complete  
-    -- Executor, ExecutorService, Future, 
-- 
+    -- Executors (util class); Executor (interface); ExecutorService (interface); ThreadPoolExecutor (class); Future; 
+  
+- Collections, Generics, Java Lambda, Java Stream
 
 ## Abstraction, Encapsulation, Inheritance, Polymorphism (many forms)
 
@@ -61,6 +62,15 @@ Execution of java file.
 Java virtual machine JVM is calling main method in the program.
 Class is loaded and all the necessary information is stored in memory by now.
 Execution of static block begins.  
+
+- Remember that **ThreadPool** is a single instance; you may submit multiple tasks to the pool
+- Executors is a helperclass; Executor and ExectorService are interfaces  
+- Bounded queue in Java is limited size queue; unbounded is un-limited size 
+  -- java.util package queues are Unbounded 
+  -- java.util.concurrent pacage queues are bounded
+- The double colon (::) operator, also known as method reference operator in Java, is used to call a method by referring to it with the help of its class directly. They behave exactly as the lambda expressions. The only difference it has from lambda expressions is that this uses direct reference to the method by name instead of providing a delegate to the method. Syntax:  
+<Class name>::<method name>   
+   -- https://www.geeksforgeeks.org/double-colon-operator-in-java/
 - ============================================================================================
  
 
@@ -272,21 +282,137 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
    -- executors manage the execution of the threads, sync, shared data handling, thread pool and all 
 - **Runnable**: represents the code to be executed
 - **Executor**: and its subclasses represent execution strategies. Consumes Runnable (task); sophisticated tools and Thread Pools, Future 
+- RMEMBER: all executor calls uses generics because only at the time of call you know the datatype
+
+- order of learning: Thread - Runnable - Callable - Executor - ExecutorService 
+- you can use Thread class to run a thread (not recommended) 
+- Runnable interface to start() the thread execution (which runs run method from your class implementing run() method from Runnable interface); no waiting on response from thread execution 
+  -- The Runnable interface is a functional interface and has a single run() method that doesn’t accept any parameters and no return any values.
+- Callable - submit() to run thread and return a future; future.get() to get the value from future 
+  -- The Callable interface is a functional generic interface containing a single call() method that returns a generic value V: learn Generics
+- Executor wraps runnable start() for single thread exec at a time
+- ExecutorService thread pool and runnable and callable both supported
+- Exceptions example: https://howtodoinjava.com/java/multi-threading/java-callable-future-example/#:~:text=Java%20Callable%20Future%20Example%201%201.%20Java%20Callable,it%20has%20been%20completed.%20...%203%203.%20Conclusion
 
 ### Executor Framework 
 - https://www.geeksforgeeks.org/what-is-java-executor-framework/ 
 - java.util.concurrent.Executor JDK 5 
-- run Runnable objects using Thread Pool (Excutors framework provides factory methods to create Thread Pools) 
+- System (OS) level threads context switch is not good if we keep on creating new threads; context switching by OS and CPU time-slicing becomes very costly and actually the job may be slower
+  -- so create known number of threads ThreadPool and attach tasks to thread pool 
+  -- submit your task to an instance of Thread Pool for execution; ThreadPool instance controls re-use of already created threads from pool as and when tasks are completed otherwise maintain tasks in Queue
+- run Runnable objects using Thread Pool (Executors framework provides factory methods to create Thread Pools) 
   -- worker threads; Queue 
   -- type of Java Executors 
   1. SingleThreadExecutor 
   2. FixedThreadPool(n)+ (fixed n number of Threads; Tasks wait in queue if all threads are busy currently)
   3. CachedThreadPool (dynamically creates thread pool on more work load; if current thread completes its job, re-used; uses SynchronousQueue)
-  4. ScheduledExecutor  (cron job kind. run thread at scheduled interval; uses ScheduledExecutorService interface)
-  
+  4. ScheduledExecutor  (cron job kind. run thread at scheduled interval; uses ScheduledExecutorService interface) 
+- Executor and ExecutorService 
+- An Executor that provides methods to manage termination and methods that can produce a Future for tracking progress of one or more asynchronous tasks... 
+- "Execution" + "Service" == "ExecutionService" - 
+   -- **Executor** just executes stuff you give it. cannot handle callables (meaning cannot wait for thread return values)
+   -- **ExecutorService** adds startup, shutdown, and the ability to wait for and look at the status of jobs you've submitted for execution on top of Executor (which it extends). 
+     -- Callable possible 
+-  https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executor.html
+  -- **Executor**: An object that executes submitted Runnable tasks. **This interface provides a way of decoupling task submission from the mechanics of how each task will be run**, including details of thread use, scheduling, etc. **An Executor is normally used instead of explicitly creating threads**. For example, rather than invoking new Thread(new(RunnableTask())).start() for each of a set of tasks, you might use:
+ Executor executor = anExecutor;
+ executor.execute(new RunnableTask1());
+ executor.execute(new RunnableTask2());
+ ... 
+ - **ExecutorService**: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html 
+ -  public interface ExecutorService extends Executor
+An Executor that provides methods to manage termination and methods that can produce a Future for tracking progress of one or more asynchronous tasks.
+An ExecutorService can be shut down, which will cause it to reject new tasks. Two different methods are provided for shutting down an ExecutorService. The shutdown() method will allow previously submitted tasks to execute before terminating, while the shutdownNow() method prevents waiting tasks from starting and attempts to stop currently executing tasks. Upon termination, an executor has no tasks actively executing, no tasks awaiting execution, and no new tasks can be submitted. An unused ExecutorService should be shut down to allow reclamation of its resources.
+
+Method submit extends base method Executor.execute(Runnable) by creating and returning a Future that can be used to cancel execution and/or wait for completion. Methods invokeAny and invokeAll perform the most commonly useful forms of bulk execution, executing a collection of tasks and then waiting for at least one, or all, to complete. (Class ExecutorCompletionService can be used to write customized variants of these methods.)
+
+The Executors class provides factory methods for the executor services provided in this package.  
+//https://www.baeldung.com/java-executor-service-tutorial
+
+## MultiThreads - Critical Section and Mutex (Mutual Exclusion) 
+- https://www.baeldung.com/java-mutex 
+- https://www.baeldung.com/java-mutex#bd-synch
+- Part of the code block which accesses shared resources (like data-structures, input-output devices, files, and network connections) are called **Critical Section** 
+  -- in our project, 'ValueForDataSyncIssues' has a private attribute in it 'sharedValue' which is the shared resource; being object, it is by reference and 2 threads Adder and Subtractor adding and subrtacting from it at the same time gives random value 
+  -- expectation after adder and subtractor is 0 but you will get some random
+- **Race Condition**: when shared data is manipulated by multiple threads at the same time (critical section), we may get un-expected behavior, without proper handling of the sequencing only in critical section
+- **Dead Lock**: two threads; you wait on me, I wait on you; no progress 
+- 
+   
+ ## Synchronized Method vs ReentrantLock 
+ - Note: if a room with 5 doors, how do you make sure only one person can go inside; 5 locks to 5 doors but single key 
+       -- when one person gets the key and goes inside, <some action>, comes out locks his door and gives the key to the other person in next door,
+### Producer Consumer problem (also known as the bounded-buffer problem)
+- A shop with 5 shelves; at a time only one item per shelf (in SW those 5 shelves means a single data buffer or queue)
+- Only when producer produces and shelf loaded, consumer can consume
+- Only when a shelf is free, producer thread can enter the shop to load the shelf 
+- with a single key approach, not effective because only one producer or consumer thread can access but based on current state of shelfs 5 threads are possible to be inside the shop  
+     -- because as soon as a shelf is loaded consumer can consume or as soon as one shelf is free producer can load 
+     
+- https://www.geeksforgeeks.org/producer-consumer-solution-using-threads-java/
+- In computing, the producer-consumer problem (also known as the bounded-buffer problem) is a classic example of a multi-process synchronization problem. The problem describes two processes, the producer and the consumer, which share a common, fixed-size buffer used as a queue. 
+
+The producer’s job is to generate data, put it into the buffer, and start again.
+At the same time, the consumer is consuming the data (i.e. removing it from the buffer), one piece at a time.
+Problem 
+To make sure that the producer won’t try to add data into the buffer if it’s full and that the consumer won’t try to remove data from an empty buffer.
+
+Solution 
+The producer is to either go to sleep or discard data if the buffer is full. The next time the consumer removes an item from the buffer, it notifies the producer, who starts to fill the buffer again. In the same way, the consumer can go to sleep if it finds the buffer to be empty. The next time the producer puts data into the buffer, it wakes up the sleeping consumer. 
+An inadequate solution could result in a deadlock where both processes are waiting to be awakened.  
+ 
+- Lock is an interface and ReentrantLock is a concrete class that implements Lock 
+   -- a Reentrant lock is a mutual exclusion (mutex) mechanism that allows threads to reenter into a lock on a resource (multiple times) without a deadlock situation 
+   -- A thread entering into the lock increases the hold count by one every time  
+   -- similarly the hold count decreases when unlock is requested 
+
+
+## Mutex vs Semaphore 
+ - Mutex : single thread only and Semaphore more than one thread (inside a shop 5 shelves; mutex will allow only one producer or consumer; Semaphore will allow more than one producer/consumer based on number of shelves empty/loaded)
+
+- In Java, Mutex and Semaphore are both synchronization primitives used to control access to shared resources in a multi-threaded environment, but they have different characteristics and use cases.
+
+Mutex:
+
+A mutex (short for mutual exclusion) is a synchronization primitive that allows only one thread to access a resource at a time. It ensures that only the thread that acquires the mutex lock can access the critical section of code, preventing other threads from entering until the lock is released.
+In Java, mutexes are typically implemented using the synchronized keyword or the ReentrantLock class from the java.util.concurrent.locks package.
+Mutexes are binary in nature, meaning they have only two states: locked and unlocked.
+Mutexes are often used to protect critical sections of code or shared resources that can only be accessed by one thread at a time.
+Semaphore:
+
+A semaphore is a synchronization primitive that controls access to a shared resource by maintaining a set of permits. Threads can acquire permits from the semaphore before accessing the resource, and release them when they are done.
+Unlike mutexes, semaphores can allow multiple threads to access the resource concurrently, up to a specified limit defined by the number of permits available.
+Semaphores can be used in scenarios where a resource has limited capacity or to control the number of threads accessing a resource simultaneously.
+In Java, semaphores are implemented using the Semaphore class from the java.util.concurrent package.
+In summary, the main difference between Mutex and Semaphore lies in their concurrency control mechanisms: Mutex allows only one thread to access a resource at a time, while Semaphore allows multiple threads to access the resource concurrently, up to a defined limit. The choice between them depends on the specific requirements of the application and the level of concurrency needed.
 
 
 
+- A Mutex, short for "mutual exclusion," is a synchronization primitive used in concurrent programming to control access to shared resources. In Java, a Mutex typically refers to the concept of mutual exclusion achieved through various mechanisms such as the synchronized keyword or the Lock interface.
+
+Here's an introduction to Java Mutex:
+
+Purpose:
+
+The primary purpose of a Mutex is to ensure that only one thread can access a resource or critical section of code at a time. It prevents concurrent access to shared resources, which could lead to data corruption or inconsistency.
+Mechanism:
+
+In Java, Mutexes are implemented using synchronization constructs such as the synchronized keyword, which provides intrinsic locking, or the Lock interface and its various implementations like ReentrantLock. These mechanisms allow threads to acquire and release locks to control access to critical sections of code or shared resources.
+synchronized Keyword:
+
+The synchronized keyword in Java provides built-in support for Mutexes. It allows methods or blocks of code to be synchronized, ensuring that only one thread can execute the synchronized portion at a time. When a thread enters a synchronized block or method, it acquires the intrinsic lock associated with the object or class and releases it when the block or method completes.
+Lock Interface:
+
+The Lock interface in the java.util.concurrent.locks package provides a more flexible alternative to intrinsic locks. It defines methods for acquiring and releasing locks explicitly, allowing finer-grained control over locking behavior. Implementations of the Lock interface, such as ReentrantLock, support features like lock interruption, timeout-based locking, and non-blocking try-lock operations.
+Usage:
+
+Mutexes are commonly used in multi-threaded Java applications to protect critical sections of code or shared resources from concurrent access. They ensure thread safety by enforcing mutual exclusion, preventing race conditions, and maintaining data integrity.
+Mutexes are especially useful in scenarios where multiple threads need to access shared data structures, perform I/O operations, or execute critical sections of code that are not thread-safe.
+Benefits:
+
+Mutexes provide a simple and effective mechanism for achieving thread safety and preventing data corruption in concurrent programs.
+They allow developers to coordinate access to shared resources and ensure that only one thread can modify the resource at any given time, reducing the risk of concurrency bugs and data inconsistencies.
+In summary, a Mutex in Java is a synchronization primitive used to enforce mutual exclusion and control access to shared resources in multi-threaded applications. It plays a crucial role in ensuring thread safety and maintaining data integrity in concurrent programming environments.
 
 # SOLID PRINCIPLES - basic coding style  
 

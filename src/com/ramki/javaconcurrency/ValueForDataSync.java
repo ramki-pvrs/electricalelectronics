@@ -34,6 +34,9 @@ public class ValueForDataSync {
         this.setSharedValue2(this.getSharedValue2() + 1);
     }
     
+    //When a thread enters a synchronized block or method, 
+    //it acquires the intrinsic lock associated with the object or class 
+    //and releases it when the block or method completes.
     public synchronized  void synchronized_calculateSumOf_sharedValue2() {
         this.setSharedValue2(this.getSharedValue2() + 1);
     }

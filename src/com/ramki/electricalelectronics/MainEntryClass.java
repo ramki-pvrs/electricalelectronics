@@ -13,11 +13,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
 //user package classes from other package
 import com.ramki.javaconcurrency.AdderDataSyncProblem;
+import com.ramki.javaconcurrency.AdderWithReentrantLock;
 import com.ramki.javaconcurrency.SubtractorDataSyncProblem;
+import com.ramki.javaconcurrency.SubtractorWithReentrantLock;
 import com.ramki.javaconcurrency.ValueForDataSync;
 
 
@@ -260,8 +264,12 @@ public class MainEntryClass {
         
         System.out.println("END Data Sync Issue Adder-Subtractor ======================================================");
         
-        System.out.println("START Non-Synchronized/Synchronized Summation ======================================================");
+        System.out.println("START Mutex: Non-Synchronized/Synchronized Summation ======================================================");
         //https://www.baeldung.com/java-synchronized
+        //Mutex is Mutual Exclusion; achieved by two ways; 
+        //1. using synchronized keyword in method definitions (refer ValueForDataSync.java)
+        //2. Reentrant Lock; Lock is an interface and ReentrantLock is a concrete class implementing Lock
+        
         
         ExecutorService es1 = Executors.newFixedThreadPool(3);
         ValueForDataSync sharedValue2Obj = new ValueForDataSync();
@@ -270,7 +278,6 @@ public class MainEntryClass {
         es1.awaitTermination(1000, TimeUnit.MILLISECONDS);
         System.out.println("Non Sync Summation Expected 1000: " + sharedValue2Obj.getSharedValue2()); //not 1000 always; 973, 986...
         
-        
         ExecutorService es2 = Executors.newFixedThreadPool(3);
         ValueForDataSync sharedValue2Obj2 = new ValueForDataSync();
         
@@ -278,8 +285,41 @@ public class MainEntryClass {
         es2.awaitTermination(1000, TimeUnit.MILLISECONDS);
         System.out.println("synchronized keyword Summation Expected 1000: " + sharedValue2Obj2.getSharedValue2()); //always 1000
         
+        //Reentrantlock based solution
         
-        System.out.println("END Non-Synchronized/Synchronized Summation ======================================================");
+        Lock lock1 = new ReentrantLock();
+        ValueForDataSync sharedValue2Obj3 = new ValueForDataSync();
+        AdderWithReentrantLock adderReEnt = new AdderWithReentrantLock(sharedValue2Obj3, lock1);
+        SubtractorWithReentrantLock subtractReEnt = new SubtractorWithReentrantLock(sharedValue2Obj3, lock1);
+        
+        ExecutorService es3 = Executors.newCachedThreadPool();
+        es3.submit(adderReEnt);
+        es3.submit(subtractReEnt);
+        
+        //you may not see this output due to large value in respective methods for loop count; console limitation
+        //you may see this before threads are even executed if Runnable is used; because you are not waiting for the results; try callable
+        System.out.println("Reentrant approach sharedValue2Obj3 final value: Expected 0 and Actual = " + sharedValue2Obj3.getSharedValue());
+        
+        
+        
+        
+        System.out.println("END Mutex Non-Synchronized/Synchronized Summation ======================================================");
+        
+        
+        System.out.println("START Semaphore ======================================================");
+        //https://www.baeldung.com/java-semaphore
+        //We can use semaphores to limit the number of concurrent threads accessing a specific resource.
+        //REMEMBER: permits; it is given +ve number of permits given as param to semaphores
+        //Semaphores can be accessed only through two standard atomic operations: wait() and signal().
+        //https://www.geeksforgeeks.org/difference-between-counting-and-binary-semaphores/
+        //Binary Semaphore: semaphore thread count is either 0 or 1; 0 means busy; 1 means free; new thread can start
+        //Counting Semaphore: semaphore thread is any +ve integer number; that means so many threads can be inside critical section at the same time
+            //remember in shop 5 shelves example, inside shop 5 producer/consumers can be present at the same time; with respect to one shelf it is still one producer or consumer
+        
+        
+        
+        System.out.println("END Semaphore ======================================================");
+        
         
         
 

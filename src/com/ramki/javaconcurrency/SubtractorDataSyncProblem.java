@@ -10,7 +10,7 @@ public class SubtractorDataSyncProblem implements Runnable {
 
     @Override
     public void run() {
-        for(int i = 1; i <= 5000; i++) {
+        for(int i = 1; i <= 5; i++) {
             this.sharedValueObj.subtract(i);
             //System.out.println("sharedValue1 AFTER subtraction = " + sharedValueObj.getSharedValue());
         }   
