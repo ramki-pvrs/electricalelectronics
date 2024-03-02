@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -20,6 +21,9 @@ import java.util.stream.IntStream;
 //user package classes from other package
 import com.ramki.javaconcurrency.AdderDataSyncProblem;
 import com.ramki.javaconcurrency.AdderWithReentrantLock;
+import com.ramki.javaconcurrency.ConsumerSemaphore;
+import com.ramki.javaconcurrency.ProducerSemaphore;
+import com.ramki.javaconcurrency.Store;
 import com.ramki.javaconcurrency.SubtractorDataSyncProblem;
 import com.ramki.javaconcurrency.SubtractorWithReentrantLock;
 import com.ramki.javaconcurrency.ValueForDataSync;
@@ -316,7 +320,36 @@ public class MainEntryClass {
         //Counting Semaphore: semaphore thread is any +ve integer number; that means so many threads can be inside critical section at the same time
             //remember in shop 5 shelves example, inside shop 5 producer/consumers can be present at the same time; with respect to one shelf it is still one producer or consumer
         
+        //Think in terms of tasks
+        //A store with 5 shelves, one item per shelf
+        //Producer has to load the shelf (after producing)
+        //Consumer can consume from the shelf
+        //If all shelves are full, producer cannot enter the store (Critical Section in code)
+        //if all shelves are empty, consumer cannot enter the store (Critical Section in code)
+        //max 5 producer+consumer can be inside store at a time because max 5 shelves
+        //on init, it is 5 producers who can enter (no shelf is loaded, so consumer has no business there)
         
+        //Basic in main program 
+        //Store with size of 5 (example number)
+        //Need executors (threads) to run producer and consumer threads
+        //one semaphore for producer and one semaphore for consumer
+        //in producer semaphore need both producer and consumer semaphore objects because when producer releases a permit, consumer can acquire
+            //producer releases the permit once thread has run and product is loaded on one of the shelves
+            //similar in consumer semaphore
+        //producerSemaphore init with 5 and consumerSemaphore init with 0 (on start, 5 shelves are empty so 5 producer threads can start off)
+        
+        ExecutorService es4 = Executors.newCachedThreadPool();
+        Store store = new Store(5);
+        Semaphore producerSema1 = new Semaphore(5); // on init, because max 5 shelves in Store, producer can readily start with loading 5 items at a time
+        Semaphore consumerSema1 = new Semaphore(0); //on init, no items on shelf so consumer cannot consume anything;
+        
+         for (int i=1; i<=8; i++) {
+             es4.execute(new ProducerSemaphore(store, producerSema1, consumerSema1));
+         }
+         
+         for (int i=1; i<=20; i++) {
+             es4.execute(new ConsumerSemaphore(store, producerSema1, consumerSema1));
+         }
         
         System.out.println("END Semaphore ======================================================");
         

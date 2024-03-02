@@ -18,9 +18,10 @@
     -- Runnable (run, obj.start(task), no waiting on response)  
     -- Callable (call, obj.submit(task), future, obj.get() get the response)  
     -- volatile  
+    -- thread methods join(), wait()...
     -- thread_t2.join(); thread t1 calls t2 and when t2 says t2.join(), t1 is waiting for t2 to complete  
     -- Executors (util class); Executor (interface); ExecutorService (interface); ThreadPoolExecutor (class); Future; 
-  
+- Atomic Variables
 - Collections, Generics, Java Lambda, Java Stream
 
 ## Abstraction, Encapsulation, Inheritance, Polymorphism (many forms)
@@ -378,14 +379,16 @@ A mutex (short for mutual exclusion) is a synchronization primitive that allows 
 In Java, mutexes are typically implemented using the synchronized keyword or the ReentrantLock class from the java.util.concurrent.locks package.
 Mutexes are binary in nature, meaning they have only two states: locked and unlocked.
 Mutexes are often used to protect critical sections of code or shared resources that can only be accessed by one thread at a time.
-Semaphore:
+
+
+Semaphore: (Mutex(lock) + Count construct)
+
 
 A semaphore is a synchronization primitive that controls access to a shared resource by maintaining a set of permits. Threads can acquire permits from the semaphore before accessing the resource, and release them when they are done.
 Unlike mutexes, semaphores can allow multiple threads to access the resource concurrently, up to a specified limit defined by the number of permits available.
 Semaphores can be used in scenarios where a resource has limited capacity or to control the number of threads accessing a resource simultaneously.
 In Java, semaphores are implemented using the Semaphore class from the java.util.concurrent package.
 In summary, the main difference between Mutex and Semaphore lies in their concurrency control mechanisms: Mutex allows only one thread to access a resource at a time, while Semaphore allows multiple threads to access the resource concurrently, up to a defined limit. The choice between them depends on the specific requirements of the application and the level of concurrency needed.
-
 
 
 - A Mutex, short for "mutual exclusion," is a synchronization primitive used in concurrent programming to control access to shared resources. In Java, a Mutex typically refers to the concept of mutual exclusion achieved through various mechanisms such as the synchronized keyword or the Lock interface.
