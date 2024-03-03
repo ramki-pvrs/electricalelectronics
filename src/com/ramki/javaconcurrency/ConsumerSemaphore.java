@@ -17,7 +17,8 @@ public class ConsumerSemaphore implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        int i = 10;
+        while (i < 10) {
             try {
                 consumerSema.acquire(); //decrement Thread-Permit
                 Thread.sleep(100);
@@ -27,6 +28,7 @@ public class ConsumerSemaphore implements Runnable {
             }
             store.removeItem(); //only after Consumer has a permit, he can consume
             producerSema.release(); //increment Thread-Permit
+            i--;
         }
     }
 

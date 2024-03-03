@@ -13,16 +13,19 @@
 - Class, Object, Attribute, Method, Constructor, Access Modifier, Non-Access Modifier, Interface, Association, Composition, Aggregation  
 - **super** and **super()**: 1. to refer immediate parent class instance variable super.xyz; 2. invoke immediate parent class method super.doSome() 3. super() to invoke immediate parent class constructor
 - **this** and **this()**:  1. refers to current instance this.<something>; can be used as first line in constructor to run this(zero or more args)
-- Concurrency, Process, Thread  
+- Concurrency, Process, Thread  (learn also Virtual Threads)
     -- Producer/Consumer 
     -- Runnable (run, obj.start(task), no waiting on response)  
     -- Callable (call, obj.submit(task), future, obj.get() get the response)  
-    -- volatile  
+    -- volatile  - https://www.baeldung.com/java-volatile 
     -- thread methods join(), wait()...
     -- thread_t2.join(); thread t1 calls t2 and when t2 says t2.join(), t1 is waiting for t2 to complete  
     -- Executors (util class); Executor (interface); ExecutorService (interface); ThreadPoolExecutor (class); Future; 
 - Atomic Variables
 - Collections, Generics, Java Lambda, Java Stream
+- https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html
+  -- Nested Classes - Inner Class, Local Class 
+- https://www.javatpoint.com/java-inner-class
 
 ## Abstraction, Encapsulation, Inheritance, Polymorphism (many forms)
 
@@ -72,6 +75,16 @@ Execution of static block begins.
 - The double colon (::) operator, also known as method reference operator in Java, is used to call a method by referring to it with the help of its class directly. They behave exactly as the lambda expressions. The only difference it has from lambda expressions is that this uses direct reference to the method by name instead of providing a delegate to the method. Syntax:  
 <Class name>::<method name>   
    -- https://www.geeksforgeeks.org/double-colon-operator-in-java/
+   
+   
+- <> diamond operator; Generics and type checking context
+  -- you can write List<String> list = new LinkedList(); you will get warning LinkedList is a raw type. References to generic type LinkedList<E> should be parameterized
+  -- if you ask Eclipse to fix it, it will make it as List<String> list = new LinkedList<String>(); observe the String inside diamond operator on right side; before Java 7
+  -- after Java 7 it should be: List<String> list = new LinkedList<>(); whatever the generic type on left side is assumed on right by JVM with empty <>; preferred approachG 
+  
+- Fail Fast and Fail Safe Iterators in Java
+
+- Performance of TreeSet : Principle of Locality
 - ============================================================================================
  
 
@@ -226,6 +239,7 @@ Screen obj 34523 belongs to TV obj 563452; in this case it is one to one relatio
 
 
 # Java Concurrency 
+-- https://www.baeldung.com/java-util-concurrent
 -- https://medium.com/@codecraftclub/simplifying-java-multithreading-runnable-interface-with-a-construction-analogy-56852d7c3df0  
 -- https://jenkov.com/tutorials/java-concurrency/creating-and-starting-threads.html
 - **Concurrency and Parallelism**: illusion of multiple tasks running in parallel is Concurrency (time-slicing and context switching); multiple tasks running in parallel in real is Parallelism
@@ -415,7 +429,197 @@ Benefits:
 
 Mutexes provide a simple and effective mechanism for achieving thread safety and preventing data corruption in concurrent programs.
 They allow developers to coordinate access to shared resources and ensure that only one thread can modify the resource at any given time, reducing the risk of concurrency bugs and data inconsistencies.
-In summary, a Mutex in Java is a synchronization primitive used to enforce mutual exclusion and control access to shared resources in multi-threaded applications. It plays a crucial role in ensuring thread safety and maintaining data integrity in concurrent programming environments.
+In summary, a Mutex in Java is a synchronization primitive used to enforce mutual exclusion and control access to shared resources in multi-threaded applications. It plays a crucial role in ensuring thread safety and maintaining data integrity in concurrent programming environments. 
+
+
+# JAVA Collections and Generics 
+- https://www.geeksforgeeks.org/how-to-learn-java-collections-a-complete-guide/
+- https://medium.com/@codecraftclub/generics-in-java-was-never-this-easy-a-complete-beginners-guide-c888c7263426 
+- https://www.geeksforgeeks.org/collections-in-java-2/
+## Generics 
+- create classes, methods, and interfaces that can work with different data types while ensuring type safety - with "type parameters" (labels in looking same closed jars) 
+- these type parameters specify what type of data each jar can hold 
+- without Generics, for each data type, you need to be creating different classes
+- Generics come to the rescue, allowing you to create a single, versatile container that can hold various types of data, just like those labeled jars help keep your kitchen organized. 
+### Type Parameters and Representation
+In Java, generics use type parameters, which are placeholders for specific data types. These type parameters can be represented in two common ways:
+
+**Single Letter Convention**: Typically, single uppercase letters are used to distinguish from regular class or interface names. The most commonly used parameters are
+E - Element (used extensively by the Java Collections Framework)
+K - Key
+N - Number
+T - Type
+V - Value
+They don't carry any special meaning; they're just placeholders.
+For example, the class java.util.HashMap<K, V> has two type parameters, K and V, representing the type of the keys and values, respectively, stored in the map. The interface java.util.List<E> has a single type parameter E representing the type of the elements stored in the list.
+
+**Descriptive Names**: Sometimes, more descriptive names like KeyType or ValueType are used for type parameters, especially when clarity is important, just as you might use labels with descriptive names for your jars.
+
+Syntax of a Generic Class -
+
+class ClassName<T1, T2, ..., Tn> {
+    // block of code
+}
+
+Here, T1, T2, …, Tn are the comma-separated type variables.
+Let’s understand with an example:
+
+class Box<T> {
+    private T contents;
+
+    public Box(T contents) {
+        this.contents = contents;
+    }
+
+    public void printDataType() {
+        System.out.println("Type: " + this.contents.getClass().getSimpleName());
+    }
+}
+
+class Main{
+   public static void main(String[] args) {
+    Box<Integer> integerBox = new Box<>(42);
+  integerBox.printDataType();
+
+    Box<String> stringBox = new Box<>("Hello, Generics!");
+  stringBox.printDataType();
+}
+}
+
+// Output:
+// Type: Integer
+// Type: String
+
+- Ramki: Box being a class, you can hold sugar in it, books in it, clothes in it; you will know this only when you create an object out of Box 
+- at that time based on what you pass between <>, decides what type of object inside the box, run time decision 
+### Generic Methods
+- Syntax
+<T1, T2, ..., Tn> returnType methodName(parameters) {
+    // block of code
+}
+
+// Example Syntax -
+
+  //Example 1
+  public <T> void methodName(T obj) {
+      // block of code
+  }
+  
+  //Example 2
+  public static <T, N> T methodName(T obj, N num) {
+      // block of code
+  }
+  
+  Example
+  
+
+### Generic Interfaces
+- Syntax of a Generic Interface:
+
+interface InterfaceName<T1, T2, ..., Tn> {
+    // block of code
+}
+
+class ClassName<T1, T2, ..., Tn> implements InterfaceName<T1, T2, ..., Tn> {
+    // block of code
+}
+
+
+
+// Example Syntax -
+
+interface Pair<K, V> {
+    K getKey();
+    V getValue();
+}  
+
+### Bounded Types
+- imagine if you wanted to limit the types that can be used with generics, just like specifying that a jar is for storing only chocolates. This is where bounded types come in.
+Syntax of a Bounded Types:
+
+<T extends A>
+
+class NumberContainer<T extends Number> {
+    private T value;
+
+    public NumberContainer(T value) {
+        this.value = value;
+    }
+
+    public T getValue() {
+        return value;
+    }
+}
+
+class Main{
+  public static void main(String[] args) {
+    NumberContainer<Integer> intContainer = new NumberContainer<>(42);
+    Integer intValue = intContainer.getValue(); // Works fine
+    System.out.println(intValue);
+
+    NumberContainer<Double> doubleContainer = new NumberContainer<>(3.14);
+    Double doubleValue = doubleContainer.getValue(); // Works fine
+    System.out.println(doubleValue);
+    }
+}
+
+// Output -
+// 42
+// 3.14
+
+
+## Java Collections 
+- https://stackoverflow.com/questions/3047474/java-and-different-types-of-stacks 
+- https://stackoverflow.com/questions/322715/when-to-use-linkedlist-over-arraylist-in-java 
+- https://www.baeldung.com/java-synchronized-collections **IMPORTANT TO LEARN**
+- A stack is an abstract data type characterized by LIFO behaviour or push/pop operations
+A list is an abstract data type characterized by having its elemets accessible through a numerical index.
+An array is a low-level implementation of a list
+java.util.List is the list type represented as a Java interface
+java.util.Deque is a Java interface that provides both LIFO and FIFO queue behaviour (and thus stack behaviour as a subset)
+java.util.Vector is an obsolete implementation of a list (based on an auto-resizing array) that should not be used anymore
+java.util.ArrayList is its modernized replacement
+java.util.Stack is an obsolete implementation of a stack that consists of adding some stack-like methods to a Vector, which is not a good way to do it.
+java.util.ArrayDeque is a modern implementation of the Deque interface
+java.util.LinkedList is a different implementation of a list (that also implements the Deque interface) that has a number of big disadvantages and should only be used in very specific cases (it is better when you need to insert or remove elements in the list very often).
+Basically, if you want a stack, use the Deque interface and ArrayDeque as implementation class (except in the rare case where LinkedList is better). If you want a list, use ArrayList
+
+Note the Vector and Stack are obsolete because all operations are synchronized. The newer implementations are not synchronized and it's up to the user to synchronize as necessary or wrap the list with a synchronized wrapper class (see java.util.Collections.synchronizedList()).
+
+
+- Hierarchy of Interfaces and Concrete Classes implementing those interfaces 
+- Interfaces: Iterable <extended by> Collection - extended by <List, Queue, Set> 
+   -- Queue interface is extended by another interface Deque 
+   -- Set interface extended by Sorted Set interface
+### List interface - ArrayList is most useful data structure; others are not recommended much
+
+## Synchronized Java Collections 
+- https://www.baeldung.com/java-synchronized-collections 
+    -- https://stackoverflow.com/questions/56776073/differences-between-concurrent-and-synchronized-collections-in-java
+- NOTE: Synchronized Collecctions and Concurrent Collection in Java are two different things 
+  -- Synchronized collections achieve thread-safety through intrinsic locking, and the entire collections are locked. Intrinsic locking is implemented via synchronized blocks within the wrapped collection’s methods. 
+  -- Concurrent collections (e.g. ConcurrentHashMap), achieve thread-safety by dividing their data into segments. In a ConcurrentHashMap, for example, different threads can acquire locks on each segment, so multiple threads can access the Map at the same time (a.k.a. concurrent access). 
+  -- 
+
+## Java Concurrent Data Collections (chatgpt)
+Java Concurrent Collections provide high-performance, thread-safe implementations of various collection types in Java. These collections are designed to be used in multi-threaded environments where multiple threads might concurrently access and modify the collections. Java Concurrent Collections are part of the java.util.concurrent package.
+
+Here are some of the commonly used Java Concurrent Data Collections
+ConcurrentHashMap: ConcurrentHashMap is a thread-safe implementation of the Map interface. It allows multiple threads to read and write concurrently without blocking each other. It achieves this through a technique called lock striping, where the map is divided into smaller segments, and locks are applied to each segment rather than the entire map.
+
+ConcurrentSkipListMap: ConcurrentSkipListMap is a concurrent, sorted map implementation. It uses a skip list data structure, which allows for efficient concurrent access and provides logarithmic time complexity for most operations.
+
+ConcurrentLinkedQueue: ConcurrentLinkedQueue is a thread-safe implementation of the Queue interface. It is based on a non-blocking, linked node structure, making it suitable for high-concurrency scenarios where multiple threads may concurrently enqueue and dequeue elements.
+
+ConcurrentLinkedDeque: ConcurrentLinkedDeque is similar to ConcurrentLinkedQueue but implements the Deque interface, allowing elements to be added or removed from both ends of the deque. It provides similar concurrency guarantees as ConcurrentLinkedQueue.
+
+CopyOnWriteArrayList: CopyOnWriteArrayList is a thread-safe variant of ArrayList. It creates a new copy of the underlying array whenever an element is added, removed, or modified, ensuring that iteration over the list is thread-safe and does not throw ConcurrentModificationException. This makes it suitable for scenarios where iteration is more common than modification.
+
+CopyOnWriteArraySet: CopyOnWriteArraySet is a thread-safe variant of HashSet. It internally uses CopyOnWriteArrayList to store elements, ensuring thread safety during iteration and modification.
+
+These collections provide various concurrency guarantees, such as thread safety, non-blocking behavior, and efficient concurrent access. However, developers should carefully choose the appropriate collection based on their specific concurrency requirements and performance considerations. Additionally, while these collections provide thread safety for individual operations, compound operations may still require external synchronization to maintain consistency.
+
+
 
 # SOLID PRINCIPLES - basic coding style  
 

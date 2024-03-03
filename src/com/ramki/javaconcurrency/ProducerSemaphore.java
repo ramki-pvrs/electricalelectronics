@@ -27,7 +27,8 @@ public class ProducerSemaphore implements Runnable {
     @Override
     public void run() {
         //continuously producing
-        while (true) {
+        int i = 10;
+        while (i < 10) {
             try {
                 producerSema.acquire(); //decrement Permit by one
                 Thread.sleep(100);
@@ -37,7 +38,7 @@ public class ProducerSemaphore implements Runnable {
             }
             store.addItem(); //after Producer acquiring a thread-permit only he can add item to the shelf
             consumerSema.release(); //increment Permit by one
-            
+            i--;
         }
     }
 

@@ -18,6 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
+import com.ramki.javacollections.LearnCollections;
 //user package classes from other package
 import com.ramki.javaconcurrency.AdderDataSyncProblem;
 import com.ramki.javaconcurrency.AdderWithReentrantLock;
@@ -188,6 +189,9 @@ public class MainEntryClass {
         //Executor is an interface; Executors is a util class
         //Executor uses Runnable task, so you don't need to start() the thread, executor will do it for you
         //Task Submission and Running the task are decoupled
+        
+        //newSingleThreadExecutor is a static method of Executors util class; so can be used directly
+        //ExecutorService is an interface
         Executor executor = Executors.newSingleThreadExecutor();
         
         
@@ -354,7 +358,11 @@ public class MainEntryClass {
         System.out.println("END Semaphore ======================================================");
         
         
+        LearnCollections learnList = new LearnCollections();
         
+        learnList.learnArrayList();
+        
+        learnList.learnSetInterfaceImplementations();
 
     }
 
