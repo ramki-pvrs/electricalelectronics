@@ -18,6 +18,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
+import com.ramki.designpatterns.Discounter;
+import com.ramki.designpatterns.MyInterface;
 import com.ramki.javacollections.LearnCollections;
 //user package classes from other package
 import com.ramki.javaconcurrency.AdderDataSyncProblem;
@@ -363,6 +365,13 @@ public class MainEntryClass {
         learnList.learnArrayList();
         
         learnList.learnSetInterfaceImplementations();
+        
+        System.out.println("Discounter XMAS = " + Discounter.christmasDiscounter());
+        
+        MyInterface myInterface = MyInterface.create();
+        System.out.println("myInterfac value = " + myInterface);
+        
+        myInterface.abstractMethod(10); // Calling the abstract method with parameter
 
     }
 

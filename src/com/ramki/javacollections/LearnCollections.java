@@ -188,7 +188,7 @@ public class LearnCollections {
     }
     
     public void learnMAPImplementations() {
-        System.out.println("Map implementations are HashMap, HashTable, LinkedHashMap, HashTreeMap")
+        System.out.println("Map implementations are HashMap, HashTable, LinkedHashMap, HashTreeMap");
     }
     
     

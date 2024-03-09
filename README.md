@@ -22,10 +22,18 @@
     -- thread_t2.join(); thread t1 calls t2 and when t2 says t2.join(), t1 is waiting for t2 to complete  
     -- Executors (util class); Executor (interface); ExecutorService (interface); ThreadPoolExecutor (class); Future; 
 - Atomic Variables
-- Collections, Generics, Java Lambda, Java Stream
-- https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html
-  -- Nested Classes - Inner Class, Local Class 
-- https://www.javatpoint.com/java-inner-class
+- Collections, Generics, Java Lambda, Java Stream 
+- Nested Classes 
+  -- https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html 
+  -- https://www.geeksforgeeks.org/nested-classes-java/
+  -- Nested Classes - Inner Class, Local Class  
+  -- Two Categories of Nested Classes: 1. static nested class 2. inner class 
+     --- two special inner classes: 1. Local Inner Classes 2, Anonymous Inner Classes
+- https://www.javatpoint.com/java-inner-class 
+- Immutable Objects: An immutable object is an object whose internal state remains constant after it has been entirely created.  
+  -- This means that the public API of an immutable object guarantees us that it will behave in the same way during its whole lifetime.
+  -- https://www.baeldung.com/java-immutable-object 
+  
 
 ## Abstraction, Encapsulation, Inheritance, Polymorphism (many forms)
 
@@ -631,8 +639,14 @@ These collections provide various concurrency guarantees, such as thread safety,
 - 
 - Shared Vocabulary (problems at creation of objects)
 - **Types of Design Patterns : 1. Creational 2. Structural 3. Behavioural** 
+- https://www.baeldung.com/java-composite-pattern 
+- https://medium.com/javarevisited/design-patterns-101-factory-vs-builder-vs-fluent-builder-da2babf42113 
+   -- creating objects using new ContructorName(arg1, arg2, ...) everywhere has inherent design problems and complexity issues 
+   -- creational patterns (templates) helps in location all object creation in one place 
+   -- Factory or Builder 
+   -- 
 ## Creational Design Patterns:  creation of objects  
-- problems at the creation of objects 
+- deal with problems at the creation of objects 
 - Singleton  - rarely used in normal dev scenarios  
    -- create class and instantiate only one object; user should not be able to create more than one  
    -- may be shared resources scenario where you dont want more than one object of same class (type) as shared resource  
@@ -713,3 +727,117 @@ These collections provide various concurrency guarantees, such as thread safety,
 - Command (Case Studies - splitwise)
 
 
+# PREPARATION TIPS
+Week 1 : 
+Topics
+Abstraction 
+Encapsulation
+Classes and Objects
+Class creation
+Object creation
+Access Modifiers
+Constructors
+Default Constructor 
+Copy Constructor
+Constructor Overloading
+Deep copy vs Shallow copy
+Pass by Reference vs Pass by Value
+Inheritance
+Constructor chaining
+Polymorphism
+Runtime Polymorphism
+Compile Time polymorphism
+Method overloading
+Method overriding
+Interfaces
+Abstract class
+Static 
+Static methods
+Final
+Final method
+Final Variable
+Final class
+
+Week 2 : 
+
+Topics
+Process Vs Thread
+Multicore systems
+Concurrency vs Parallelism
+Context switching
+Coding a Multi threaded program
+Thread creation 
+start()
+wait()
+sleep()
+Thread pool
+Thread lifecycle
+Executors 
+Runnable and Callables
+Futures
+Volatile keyword
+Synchronization
+Synchronization Issue (Adder / Subtractor Example)
+Reasons of Issue
+Properties of Best solution
+Mutex
+Synchronized keyword
+Synchronized methods
+Semaphores
+Concurrent Data Structures
+Atomic data types
+
+
+
+
+Week 3 :
+
+Topics
+Collections 
+Collection framework
+Hierarchy of Collection Framework
+List
+Set
+Queue
+HashSet vs HashMap
+TreeMap 
+LinkedHashMap
+Vector
+ConcurrentHashmap
+Generics
+Function Interface
+Lambda Functions
+Streams
+Terminal vs Intermediate methods
+Parallel Streams
+Functional Programming using Java
+Exception Handling
+Strings in Java
+Garbage collection
+Memory Management in Java
+
+
+# Java 8
+- https://medium.com/@fullstacktips/java-8s-game-changer-functional-interfaces-and-more-e6689213650d 
+- https://stackoverflow.com/questions/5543216/java-interface-with-method-that-returns-called-object 
+- https://www.baeldung.com/java-static-default-methods 
+- In Java 8, interfaces gained the ability to have static methods. 
+These methods are defined within the interface itself and can be called without needing an instance of the interface. 
+**One interesting feature about static methods in interfaces is that they can have a return type that matches the interface name,**
+**even if the actual return value is of a different type.**
+- https://www.baeldung.com/java-strategy-pattern
+- public interface Discounter {
+    BigDecimal applyDiscount(BigDecimal amount);
+
+    static Discounter christmasDiscounter() {
+        return amount -> amount.multiply(BigDecimal.valueOf(0.9));
+    }
+
+    static Discounter newYearDiscounter() {
+        return amount -> amount.multiply(BigDecimal.valueOf(0.8));
+    }
+
+    static Discounter easterDiscounter() {
+        return amount -> amount.multiply(BigDecimal.valueOf(0.5));
+    }
+}
