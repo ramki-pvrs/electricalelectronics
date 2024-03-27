@@ -372,6 +372,15 @@ public class MainEntryClass {
         System.out.println("myInterfac value = " + myInterface);
         
         myInterface.abstractMethod(10); // Calling the abstract method with parameter
+        
+        
+        System.out.println("START Functional Interface ======================================================");
+        
+        ElectricalPowerUnitCalculator tvPowerUnits = new Television("Electronics", "TV", "Panasonic", "Count", screen2, "OLED", -1);
+        
+        System.out.println("Power unit calc for TV is tvPowerUnits = " + tvPowerUnits.calculatePowerUnits(10));
+        
+        System.out.println("END Functional Interface ======================================================");
 
     }
 

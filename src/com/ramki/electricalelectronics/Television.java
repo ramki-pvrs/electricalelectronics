@@ -1,6 +1,6 @@
 package com.ramki.electricalelectronics;
 
-public class Television extends Electronics implements BuyerMethods {
+public class Television extends Electronics implements BuyerMethods, ElectricalPowerUnitCalculator {
     
     public static int tvsCount = 0;
     
@@ -111,6 +111,15 @@ public class Television extends Electronics implements BuyerMethods {
     public String returnSingleItem(int itemNumber) {
         // TODO Auto-generated method stub
         return "Item with serial number " + itemNumber + " returned.";
+    }
+    
+    
+    //Functional Interface abstract method
+    //some dummy calc of multiplying operation duration in hours with 0.2
+    
+    @Override 
+    public double calculatePowerUnits(Integer operationDuration) {
+        return operationDuration * 0.2;
     }
 
 }
