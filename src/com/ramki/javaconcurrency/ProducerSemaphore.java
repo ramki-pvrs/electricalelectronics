@@ -4,10 +4,10 @@ import java.util.concurrent.Semaphore;
 
 //acquire -> count 
    //acquire means, from available Semaphore permits, 
-   //you have acquired one; so now available is less one
+   //you have acquired one; so now available permits are less one
 //release -> count ++; 
    //release means what you have acquired earlier, 
-   //you are letting go one Semaphore permit so available permit is plus one now
+   //you are letting go one Semaphore permit so now available permits are plus one
 //prodSema = 5
 //prodSema = 5 - 1 = 4
 //consSema = 0

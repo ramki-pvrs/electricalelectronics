@@ -2,6 +2,7 @@ package com.ramki.electricalelectronics;
 
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -18,6 +19,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
+import com.ramki.chatgptmultithreading.CounterForSynchronizedKeyWord;
+import com.ramki.chatgptmultithreading.GPT_Callable_Task;
+import com.ramki.chatgptmultithreading.GPT_Runnable_Task;
 import com.ramki.designpatterns.Discounter;
 import com.ramki.designpatterns.MyInterface;
 import com.ramki.javacollections.LearnCollections;
@@ -132,8 +136,29 @@ public class MainEntryClass {
             
             
             
+            //NESTED CLASSES
+            //nested static class example
+            Television.TVUtils nestedStaticClassObj = new Television.TVUtils();
             
+            System.out.println("Some method output from nested static class = " + nestedStaticClassObj.calculateCostOfProduction());
             
+            //nested inner local class example
+            Television.TVConnectionStatus tv1ConnStatus = tv1.new TVConnectionStatus("Bluetooth Off", "Wifi Off");
+            
+            System.out.println("Nested Inner Local Class Bluetooth conn status = " + tv1ConnStatus.getBluetoothConnectionStatus());
+            System.out.println("Nested Inner Local Class wifi conn status = " + tv1ConnStatus.getWifiConnectionStatus());
+            
+            tv1ConnStatus.setBluetoothConnectionStatus("Bluetooth ON");
+            tv1ConnStatus.setWifiConnectionStatus("Wifi ON");
+            
+            System.out.println("Nested Inner Local Class Bluetooth conn status = " + tv1ConnStatus.getBluetoothConnectionStatus());
+            System.out.println("Nested Inner Local Class wifi conn status = " + tv1ConnStatus.getWifiConnectionStatus());
+            
+            tv1.thisTVConnectionStatus.enableBluetoothConnection(tv1);
+            tv1.thisTVConnectionStatus.enableWifiConnection(tv1);
+            
+            System.out.println("Nested Inner Anonymous Class Bluetooth conn status = " + tv1ConnStatus.getBluetoothConnectionStatus());
+            System.out.println("Nested Inner Anonymous Class wifi conn status = " + tv1ConnStatus.getWifiConnectionStatus());
 
             
         System.out.println("END OOPS ======================================================");
@@ -373,7 +398,11 @@ public class MainEntryClass {
         
         myInterface.abstractMethod(10); // Calling the abstract method with parameter
         
+        LearnCollections learnQueue = new LearnCollections();
+        learnQueue.learnQueueImplementation();
         
+        LearnCollections learnMaps = new LearnCollections();
+        learnMaps.learnMAPImplementations();
         System.out.println("START Functional Interface ======================================================");
         
         ElectricalPowerUnitCalculator tvPowerUnits = new Television("Electronics", "TV", "Panasonic", "Count", screen2, "OLED", -1);
@@ -381,7 +410,143 @@ public class MainEntryClass {
         System.out.println("Power unit calc for TV is tvPowerUnits = " + tvPowerUnits.calculatePowerUnits(10));
         
         System.out.println("END Functional Interface ======================================================");
+        
+        
+        System.out.println("START ChatGPT multithreading  ======================================================");
+        
+        
+        /*
+          prompt: in syncrhonized program example you gave is this line Thread incrementThread = new Thread lambda expression?
+          
+          Yes, that's correct! In the example provided, the line Thread incrementThread = new Thread(() -> { <your code block> }); uses a lambda expression to define the Runnable object that will be executed by the Thread.
 
-    }
+Here's a breakdown of how it works:
 
-}
+The lambda expression () -> { <your code block> } represents an anonymous function that implements the Runnable interface. This lambda expression defines the task that the Thread will execute.
+
+In Java, a lambda expression is an alternative way to express instances of single-method interfaces (such as Runnable in this case) concisely.
+
+The Runnable interface has a single abstract method, run(), which is implemented by the lambda expression inside the parentheses { <your code block>  }.
+
+The new Thread(...) constructor creates a new Thread object, which takes a Runnable parameter. In this case, the Runnable parameter is the lambda expression () -> { <your code block> }.
+
+When the start() method of the Thread object is called later, it executes the code defined in the lambda expression.
+
+So, the line Thread incrementThread = new Thread(() -> { <your code block> }); creates a new Thread object that will execute the code defined within the lambda expression when started.
+         
+         *
+         *
+         *
+         In Java, the join() method makes the current thread (in this case, the main thread) wait for the specified thread to finish execution. 
+         When you call incrementThread.join(), it means the main thread will wait for the incrementThread to finish before proceeding further.
+
+However, the order in which you call join() on the threads doesn't affect their execution order. 
+Regardless of whether you call incrementThread.join() before or after decrementThread.join(), 
+both threads will execute concurrently. The join() method only affects the main thread's behavior, not the behavior of the other threads.
+
+To clarify:
+
+Calling incrementThread.join() before decrementThread.join() means the main thread will wait for the incrementThread to finish first and 
+then wait for the decrementThread to finish.
+
+Calling decrementThread.join() before incrementThread.join() means the main thread will wait for the decrementThread to finish first and 
+then wait for the incrementThread to finish.
+
+Regardless of the order of calls to join(), both incrementThread and decrementThread will execute concurrently. 
+THE ORDER IN WHICH THE MAIN THREAD WAITS FOR INCREMENT and DECREMENT THREADS TO FINISH DOES NOT AFFECT THEIR CONCURRENT EXECUTION.
+         */
+        
+        
+        
+        //shared counter 
+        CounterForSynchronizedKeyWord counter1 = new CounterForSynchronizedKeyWord();
+        
+        //Thread gptIncrementThread = new Thread( pass Lambda here as Thread class constructor param which will implement Runnable - run method  - because it is the single abstract method in Runnable interface    )
+        Thread gptIncrementThread = new Thread(() -> {
+            for(int i = 1; i < 10000; i++) {
+                counter1.increment();
+            }
+        });
+        
+        Thread gptDecrementThread = new Thread(() -> {
+            for(int i = 1; i < 10000; i++) {
+                counter1.decrement();
+            }
+        });
+        
+        gptIncrementThread.start(); //runnable run method started
+        gptDecrementThread.start();
+        
+        
+        //wait for threads to complete
+        try {
+            gptIncrementThread.join();
+            gptDecrementThread.join();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        // Display the final count
+        System.out.println("Final gpt count : " + counter1.getCount());
+        
+        
+        //Runnable Interface
+        for(int i = 0; i < 3; i++) {
+            Thread gptThread1 = new Thread(new GPT_Runnable_Task("print Perform task for taskGroup_" + i));
+            gptThread1.start();
+        }
+        
+        
+        //Callable implementation
+        //1. get a thread pool using ExecutorService interface
+        //2. based on number of Tasks create a futures collection (ArrayList) to hold the return values
+        //3. create your task object
+        //4. submit your task object to executorService (threadpool) which will return single fture 
+        //5. add that returned single future to futures collection
+        //6. iterate futures collection and print the returned type (String in GPT_Callable_Task example)
+        
+        
+        //ExectorService is interface
+        //Executors in concrete class
+        //newFixedThreadPool is static method in it (you dont need an object then)
+        
+        //create a thread pool with fixed number of threads
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        
+        //create a ArrayList container to hold futures
+        List<Future<String>> futures = new ArrayList<>();
+        
+        for(int i = 0; i <= 5; i++) {
+            //create a Callable task 
+            Callable<String> callableTask = new GPT_Callable_Task("Task " + i);
+            //submit it to threadpool and return a future
+            //executorService.submit(callableTask) this RHS returns a future
+             
+            //observe singular future here which will be added to futures collection
+            Future<String> future = executorService.submit(callableTask);
+            futures.add(future);
+            
+        }
+        
+        //once tasks are done, shutdown executor service
+        executorService.shutdown();
+        //remember futures are a collection now
+        
+        for(Future<String> future : futures) {
+            try {
+                String callableFutureReturnValue = future.get();
+                System.out.print("Callable return = " + callableFutureReturnValue);
+            } catch (InterruptedException | ExecutionException e) {
+                System.out.println("Callable task error " + e.getMessage());
+            }
+        }
+        
+        
+        
+        
+        
+        System.out.println("END ChatGPT multithreading  ======================================================");
+
+    } //END public static void main(String[] args) throws InterruptedException
+
+} //END public class MainEntryClass

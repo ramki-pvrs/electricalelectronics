@@ -1,15 +1,22 @@
 package com.ramki.javacollections;
 
+//https://www.geeksforgeeks.org/how-to-learn-java-collections-a-complete-guide/
 //https://www.geeksforgeeks.org/collections-in-java-2/
+//https://beginnersbook.com/java-collections-tutorials/
+//
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -180,6 +187,7 @@ public class LearnCollections {
         someHashSet.add("Ritu");
         someHashSet.add("Ritu");
         someHashSet.add(null); //null is possible
+        someHashSet.add(null); //2nd null igonored anyway because HashSet is unique elements
         
         System.out.println("LearnCollections - learnHashSet after some add ops = " + someHashSet.toString());
         //prints [Shammu, Suni, Teju, Ramki, Sudhir, Ritu]; OBSERVE: not in insertion order; also Ritu is present only once even though added twics
@@ -236,6 +244,7 @@ public class LearnCollections {
         someLinkedHashSet.add("Sudhir");
         someLinkedHashSet.add("Ritu");
         someLinkedHashSet.add("Ritu");
+        someLinkedHashSet.add(null); //null value possible
         
         System.out.println("LearnCollections - learnLinkedHashSet after some add ops = " + someLinkedHashSet.toString());
         //prints [Ramki, Suni, Teju, Shammu, Sudhir, Ritu] : OBSERVE unique and insertion order maintained
@@ -250,9 +259,12 @@ public class LearnCollections {
             It doesn’t preserve the insertion order of the elements
             It sorts the elements in ascending order
             It’s not thread-safe
-            In this implementation, objects are sorted and stored in ascending order according to their natural order. The TreeSet uses a self-balancing binary search tree, more specifically a Red-Black tree.
+            In this implementation, objects are sorted and stored in ascending order according to their natural order. 
+            The TreeSet uses a self-balancing binary search tree, more specifically a Red-Black tree.
             
-            Simply put, being a self-balancing binary search tree, each node of the binary tree comprises of an extra bit, which is used to identify the color of the node which is either red or black. During subsequent insertions and deletions, these “color” bits helps in ensuring that the tree remains more or less balanced.
+            Simply put, being a self-balancing binary search tree, each node of the binary tree comprises of an extra bit, 
+            which is used to identify the color of the node which is either red or black. 
+            During subsequent insertions and deletions, these “color” bits helps in ensuring that the tree remains more or less balanced.
 
 
          */
@@ -266,6 +278,7 @@ public class LearnCollections {
         someTreeSet.add("Sudhir");
         someTreeSet.add("Ritu");
         someTreeSet.add("Ritu");
+        //someTreeSet.add(null); TreeSet cannot have null; HashSet and LinkedHashSet can have null  as value
         
         
         System.out.println("LearnCollections - learnTreeSet after some add ops = " + someTreeSet.toString());
@@ -280,8 +293,215 @@ public class LearnCollections {
         //https://www.baeldung.com/java-tree-set
     }
     
+    public void learnQueueImplementation() {
+        System.out.println("Queue is an interface; implemented by PriorityQueue concrete class; Deque is interface which extends Queue interface; ");
+        
+        /*
+         Priority Queue:
+           - .remove() removes highest priority
+           - highest priority means for example if you insert numbers and dont set any comparator for ordering, natural ASC ordering
+           - so .remove() will remove lowest number
+           
+            When you remove an element from a PriorityQueue, 
+            it removes the element that is considered the highest priority according to the ordering defined by the elements' natural ordering 
+            or a Comparator provided during initialization.
+         */
+        
+        PriorityQueue<Integer> pq1 = new PriorityQueue<>(); //empty <> means type is assumed from Left Hand Side
+        
+        pq1.add(10);
+        pq1.add(20);
+        pq1.add(2);
+        pq1.add(200);
+        
+        System.out.println("Priority Queue pq1 = " + pq1); 
+        //prints Priority Queue pq1 = [2, 20, 10, 200]
+        
+        pq1.remove();
+        
+        System.out.println("Priority Queue pq1 after remove() = " + pq1); 
+        //prints Priority Queue pq1 after remove() = [10, 20, 200] //due natural ASC order for Integers, 2 is removed, highest priority is 2
+        
+        /*
+         In this example, pq.remove() removes the element with the highest priority, 
+         which is the smallest number in this case because integers are naturally ordered. 
+         You can remove any element from the PriorityQueue, 
+         but it will always remove the element with the highest priority according to the defined ordering.
+         
+         In the context of Java's PriorityQueue, the term "Priority" refers to the concept that elements are retrieved in a specific order based on their priority 
+         or some defined ordering criterion.
+
+         The PriorityQueue class in Java is a data structure implementation that orders its elements according to their natural ordering 
+         (if they implement the Comparable interface) or by a Comparator provided at the queue's construction time. 
+         Elements with a higher priority (i.e., those that compare as "less than" other elements) 
+         are dequeued before elements with lower priority.
+
+         The term "priority" implies that certain elements have precedence over others based on some criteria. 
+         This can vary depending on the application. For example, in a task scheduler, 
+         tasks with earlier deadlines might have higher priority. 
+         In a messaging system, messages marked as urgent might have higher priority.
+
+          So, when we call it a "PriorityQueue," it signifies that elements are stored and retrieved based on their priority, 
+          ensuring that elements with higher priority are dequeued before elements with lower priority.
+         */
+        
+        //you can pass custom comparator to PriorityQueue
+        //for that first lets create custom comparator
+        //inside angle bracket, it is type passed to Comparator interface which has generic type inside
+        
+        /*
+        the below Comparator section
+        The syntax you're referring to is an example of an anonymous class in Java. In this context, it's specifically used to implement the Comparator interface by defining its compare() method.
+
+        Here's the breakdown of the syntax:
+        
+        1. `new Comparator<Message>() { ... }: This part creates an instance of an anonymous class that implements the Comparator interface for the Message class. 
+        It's anonymous because it doesn't have a specific name like a named class would.
+        
+        2. @Override: This annotation indicates that the compare() method is overriding a method defined in the Comparator interface. 
+        It helps catch errors at compile time if the method signature doesn't match any method in the interface.
+        
+        3. public int compare(Message m1, Message m2) { ... }: This is the implementation of the compare() method required by the Comparator interface. 
+        Within this method, you specify the logic for comparing two Message objects based on their urgencies.
+        
+        4. Anonymous classes are useful when you need a quick, one-off implementation of an interface or a subclass of a class without creating a separate named class. 
+        They're commonly used for event listeners, thread creation, and implementations of interfaces with a single method, like Comparator, 
+        where you need to provide the implementation inline.
+
+        */
+        
+        
+        Comparator<Message> messageCustomComparator = new Comparator<Message>() {
+            @Override
+            //Higher urgency messages should have higher priority that means their integer should be lower that other message 1 is High Priority and 2 is low priogrity
+            public int compare(Message m1, Message m2) {
+                return Integer.compare(m1.getUrgency(), m2.getUrgency());
+            }
+        };
+        
+        PriorityQueue<Message> messageQueue = new PriorityQueue<Message>(messageCustomComparator);
+        
+        messageQueue.add(new Message("High Priority Message", 2));
+        messageQueue.add(new Message("Highest Priority Message", 1));
+        messageQueue.add(new Message("Low Priority Message", 3));
+        messageQueue.add(new Message("Medium Priority Message", 4));
+        /*
+         prints 
+         Message = Highest Priority Message and its urgency = 1
+         Message = High Priority Message and its urgency = 2
+         Message = Low Priority Message and its urgency = 3
+         Message = Medium Priority Message and its urgency = 4
+         
+         In this example:
+
+            We define a Message class with fields for content and urgency.
+            We create a custom Comparator to compare Message objects based on their urgency.
+            We initialize a PriorityQueue for Message objects with the custom comparator.
+            We add messages with different urgencies to the queue.
+            When we retrieve messages from the queue using poll(), they are retrieved in order of urgency, with higher urgency messages dequeued first.
+            
+         */
+        
+        while(!messageQueue.isEmpty()) {
+            Message msg = messageQueue.poll(); //poll() will remove highest priority item first
+            System.out.println("Message = " + msg.getContent() + " and its urgency = " + msg.getUrgency());
+        }
+        
+       
+        //Anonymous class after new Comparator<SomeTask>() {Anonymous class and its instance is immediate}
+        Comparator<SomeTask> taskCustomComparator = new Comparator<SomeTask>() {
+
+            @Override
+            public int compare(SomeTask t1, SomeTask t2) {
+                return Integer.compare(t1.getTaskDeadlineInDays(), t2.getTaskDeadlineInDays());
+            }
+            
+        };
+        
+        PriorityQueue<SomeTask> tasksWithDeadline = new PriorityQueue<SomeTask>(taskCustomComparator);
+        
+        /*
+         When two messages have the same urgency in a PriorityQueue with a custom comparator, 
+         the order in which they are dequeued from the queue 
+         might not be deterministic unless the comparator considers additional factors for comparison.
+         */
+        tasksWithDeadline.add(new SomeTask("Task 2", 10));
+        tasksWithDeadline.add(new SomeTask("Task 1", 10));
+        tasksWithDeadline.add(new SomeTask("Task 3", 20));
+        tasksWithDeadline.add(new SomeTask("Task 4", 30));
+        
+        while(!tasksWithDeadline.isEmpty()) {
+            SomeTask t = tasksWithDeadline.remove();
+            System.out.println("Some Task t = " + t.getTaskName() + " and this task deadline in days = " + t.getTaskDeadlineInDays());
+        }
+        
+        
+        
+        
+    }
+    
     public void learnMAPImplementations() {
         System.out.println("Map implementations are HashMap, HashTable, LinkedHashMap, HashTreeMap");
+        /*
+         * 
+         * Map - generic interface with Map<K, V> Key Value
+         Map - key - value; keys are unique
+         from a Map, you can get key Set, key-value pairs, collection of only values
+         mappings are stored based on the key part of the map, similar to Sets
+         key - hashCode storage
+         
+         
+         HashMap implements Map interface
+         -- for every entry in HashMap as hashCode is computed and each key-value pair is inserted in HashMap with hashCode as its index (to remember 3 columns, hashCode, Key, Value which is a unique row)
+         -- HashMap has constant time performance for basic retrieval, insertion, deletion, and manipulation operations
+         -- The two most important factors that affect the performance of a HashMap are initial capacity and load factor
+         https://www.geeksforgeeks.org/differences-between-hashmap-and-hashtable-in-java/
+         
+         Interfaces: Map, SortedMap
+         Classes: HashMap, HashTable, LinkedHashMap (insertion order), TreeMap (natural order or Comparator order)
+         Abstract Classes: AbstractMap
+         
+         */
+        
+          //car objects stored with their vin as key
+          Map<String, Car> carsMap = new HashMap<String, Car>();
+          
+          
+          Car vw = new Car("227H54", "1997 Volkswagen");
+          Car mustang = new Car("448A69", "1965 Mustang");
+          Car porsche = new Car("453B55", "2007 Porsche");
+          Car bmw = new Car("177R60", "1980 BMW");
+          
+          
+          //vin is the key and Car is the value (happens to be Car object)
+          //so if you get by vin (key), you are getting the Car object
+          
+          carsMap.put(vw.getVin(), vw);
+          carsMap.put(mustang.getVin(), mustang);
+          carsMap.put(porsche.getVin(), porsche);
+          carsMap.put(bmw.getVin(), bmw);
+          
+          Car getMustangCar = carsMap.get(mustang.getVin());
+          
+          //you can get all keys as Set
+          Set<String> carsVins = carsMap.keySet();
+          
+          //you can get all Values (Car objects)
+          Collection<Car> cars1 = carsMap.values();
+          
+          //Map is a generic interface
+          //from carsMap you can get Set of Map.Entry of items
+          //each entry is a key and value
+          
+          
+          Set<Map.Entry<String, Car>> carEntries = carsMap.entrySet();
+          //how do you iterate such entries
+          for(Map.Entry<String, Car> carEntry : carEntries) {
+              System.out.println("Key = " + carEntry.getKey());
+              System.out.println("Value = " + carEntry.getValue());
+              
+          }
+
     }
     
     
