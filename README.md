@@ -23,13 +23,15 @@
     -- Executors (util class); Executor (interface); ExecutorService (interface); ThreadPoolExecutor (class); Future; 
 - Atomic Variables
 - Collections, Generics, Java Lambda, Java Stream 
-- Nested Classes 
+- Nested Classes
   -- https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html 
   -- https://www.geeksforgeeks.org/nested-classes-java/
   -- Nested Classes - Inner Class, Local Class  
   -- Two Categories of Nested Classes: 1. static nested class 2. inner class 
      --- two special inner classes: 1. Local Inner Classes 2, Anonymous Inner Classes
-- https://www.javatpoint.com/java-inner-class 
+  -- https://www.javatpoint.com/java-inner-class 
+  -- Check Television class for static nested class and local inner class and anonymous inner class 
+  -- 
 - Immutable Objects: An immutable object is an object whose internal state remains constant after it has been entirely created.  
   -- This means that the public API of an immutable object guarantees us that it will behave in the same way during its whole lifetime.
   -- https://www.baeldung.com/java-immutable-object 
@@ -57,6 +59,12 @@
 -- **class loading**: https://www.geeksforgeeks.org/what-is-class-loading-and-static-blocks-in-java/  
 -- https://www.javatpoint.com/classloader-in-java  
 -- Class Loading is the process of storing the class-specific information in the memory. Class-specific information means, information about the class members, i.e., variables and methods. It is just like that before firing a bullet, first, we need to load the bullet into the pistol. Similarly, to use a class first we need to load it by a class loader. Static block runs only once in the life of a class. It can only access the static members and will only belong to the class.
+
+### Different types of classes 
+- Ordinary class 
+- Inner class 
+- Local class 
+- Anonymous class
 
 Static Block is just like any block of code beginning with a ‘static’ keyword is a static block. Static is a keyword which when attached to the method, variable, Block makes it Class method, class variable, and class Block. You can call a static variable/method using ClassName. JVM executes the static block at “CLASS LOADING TIME”.
 
@@ -93,6 +101,19 @@ Execution of static block begins.
 - Fail Fast and Fail Safe Iterators in Java
 
 - Performance of TreeSet : Principle of Locality
+
+- Serializable Interface in Java 
+  -- https://www.geeksforgeeks.org/serializable-interface-in-java/ 
+- Cloneable interface in Java
+
+- Interface has different method types
+  - abstract method (Java 8: in functional interface this should be only one) 
+     -- if it is a functional interface #FunctionalInterface decorator 
+     -- if not functional interface you may have many abstract methods
+  - Onject method - for example in Comparator interface, boolean equals(Object obj); even though looks like abstract method but it is notl; 
+  - static method (from Java 8)
+  - default emthod (from Java 8)
+  
 - ============================================================================================
  
 
@@ -820,7 +841,10 @@ Memory Management in Java
 # Java 8
 - https://medium.com/@fullstacktips/java-8s-game-changer-functional-interfaces-and-more-e6689213650d 
 - https://stackoverflow.com/questions/5543216/java-interface-with-method-that-returns-called-object 
-- https://www.baeldung.com/java-static-default-methods 
+- https://www.baeldung.com/java-static-default-methods  
+- https://www.baeldung.com/java-8-lambda-expressions-tips 
+- https://www.programiz.com/java-programming/lambda-expression 
+- https://medium.com/hello-java/thorough-explanation-of-lambda-expressions-in-java-what-are-they-and-how-to-use-them-4ba3e179212a
 - In Java 8, interfaces gained the ability to have static methods. 
 These methods are defined within the interface itself and can be called without needing an instance of the interface. 
 **One interesting feature about static methods in interfaces is that they can have a return type that matches the interface name,**
@@ -841,3 +865,82 @@ These methods are defined within the interface itself and can be called without 
         return amount -> amount.multiply(BigDecimal.valueOf(0.5));
     }
 }
+
+## Functional Interfaces SAM Interface (Single Abstract Method Interface)
+- https://www.geeksforgeeks.org/functional-interfaces-java/ 
+- https://medium.com/hello-java/thorough-explanation-of-lambda-expressions-in-java-what-are-they-and-how-to-use-them-4ba3e179212a 
+- 
+
+- an interface with only one abstract method  
+   -- it can have any number of default methods or static methods
+   -- lambda expression uses this functional interface
+   -- that lambda expression will implement that only one abstract method (internnaly its creating a class and implements that functional interface abstract method and uses it to deal with the function) 
+   -- meaning From Java 8 onwards, lambda expressions can be used to represent the instance of a functional interface.
+   -- Functional interfaces are included in Java SE 8 with Lambda expressions and Method references 
+   -- different types of Method references  https://www.baeldung.com/java-8-new-features
+   
+   -- lambda expression to use that only one abstract method defined in the functional interface
+   -- method references to use static and default methods defined in functional interface 
+   -- In Functional interfaces, there is no need to use the abstract keyword as it is optional to use the abstract keyword because, by default, the method defined inside the interface is abstract only. 
+   -- We can also call Lambda expressions as the instance of functional interface.
+
+## Lambda Expression
+- https://medium.com/hello-java/thorough-explanation-of-lambda-expressions-in-java-what-are-they-and-how-to-use-them-4ba3e179212a
+
+ ChatGPT
+ Prompt : tell me in Java can I have lambda expression without functional interface
+
+ 
+ 
+ In Java, lambda expressions are closely tied to functional interfaces. A functional interface is an interface with exactly one abstract method. Lambda expressions can be used to provide an implementation for the abstract method of a functional interface.
+
+However, it's not possible to have a lambda expression without a functional interface in Java because lambda expressions are essentially a concise way to represent an instance of a functional interface.
+
+   
+ChatGPT
+can you explain Java Lambda expression type inference
+
+Certainly! In Java, lambda expressions allow you to represent a block of code as an instance of a functional interface. Lambda expressions are often used in contexts where the target type can be inferred, which means you don't always need to specify the type explicitly. This is known as type inference.
+
+Type inference in lambda expressions works in the following way:
+
+Target Type Inference: When a lambda expression is assigned to a variable or passed as an argument to a method, the compiler can often infer the target type from the context in which the lambda expression appears. The target type is the type of the functional interface to which the lambda expression will be converted.
+
+Example:
+
+java
+Copy code
+// Target type inference
+Comparator<String> comparator = (s1, s2) -> s1.compareTo(s2);
+Here, the compiler infers that the lambda expression (s1, s2) -> s1.compareTo(s2) should be converted to a Comparator<String> because it's being assigned to a variable of type Comparator<String>.
+
+Parameter Type Inference: In lambda expressions, parameter types can often be inferred from the context in which the lambda expression is used. This works when the lambda expression is used in a context where the types of its parameters are already known.
+
+Example:
+
+java
+Copy code
+// Parameter type inference
+BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+Here, the types of parameters a and b are inferred to be Integer because the lambda expression is assigned to a variable of type BiFunction<Integer, Integer, Integer>.
+
+Return Type Inference: In most cases, the return type of a lambda expression can be inferred by the compiler based on the context in which the lambda expression is used. If the body of the lambda expression is a single expression, the return type can often be inferred from the type of that expression.
+
+Example:
+
+java
+Copy code
+// Return type inference
+Supplier<String> messageSupplier = () -> "Hello, World!";
+Here, the compiler infers that the return type of the lambda expression () -> "Hello, World!" should be String because it's being assigned to a variable of type Supplier<String>.
+
+Overall, type inference in lambda expressions allows for more concise and readable code by reducing the need for explicit type declarations. It helps Java developers write more expressive code while still maintaining strong static type checking.
+
+
+
+
+
+
+
+     
+   
