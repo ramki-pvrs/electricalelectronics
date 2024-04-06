@@ -66,6 +66,8 @@
 - Local class 
 - Anonymous class
 
+- Optional Class
+
 Static Block is just like any block of code beginning with a ‘static’ keyword is a static block. Static is a keyword which when attached to the method, variable, Block makes it Class method, class variable, and class Block. You can call a static variable/method using ClassName. JVM executes the static block at “CLASS LOADING TIME”.
 
 Execution Order: For every static block, there is an order in which static block/method/variable gets initialized. 
@@ -872,7 +874,8 @@ These methods are defined within the interface itself and can be called without 
 - 
 
 - an interface with only one abstract method  
-   -- it can have any number of default methods or static methods
+   -- it can have any number of default methods or static methods 
+   -- it cannot have data members (normal interfaces can have data members like int num1 = 10;)
    -- lambda expression uses this functional interface
    -- that lambda expression will implement that only one abstract method (internnaly its creating a class and implements that functional interface abstract method and uses it to deal with the function) 
    -- meaning From Java 8 onwards, lambda expressions can be used to represent the instance of a functional interface.
@@ -885,7 +888,27 @@ These methods are defined within the interface itself and can be called without 
    -- We can also call Lambda expressions as the instance of functional interface.
 
 ## Lambda Expression
+- https://www.geeksforgeeks.org/lambda-expressions-java-8/
 - https://medium.com/hello-java/thorough-explanation-of-lambda-expressions-in-java-what-are-they-and-how-to-use-them-4ba3e179212a
+
+- Being an expression, Lambda expresses a functional interface implementation (functional interface means an interface with one and only abstract methods; may be it has more default methods and static methods and data members)
+- accepts input parameters and returns processed output (exactly same as a python function) 
+- provides below functionalities 
+  -- being a function object, it can be passed as method argument 
+  -- the whole lambda code block is passed as data
+  -- you can store it in a data structure also (ArrayList of Lambda Expressions??)
+  -- you can return a Lambda Expression from a method 
+  -- create a function without any class association 
+  -- pass it and execute it on demand 
+
+
+-- valid or invalid lambda expressions
+
+() -> {} - correct lambda expression, returns void; similar to public void run() { }.
+() -> “geeksforgeeks” - correct, returns string; observe no 
+() -> { return “geeksforgeeks”;) - correct; insde { } it is inside code block
+(Integer i) -> return “geeksforgeeks” + i; - invalid; correct one is  (Integer i) -> {return “geeksforgeeks” + i;}; {} closure is requried
+(String s) -> {“geeksforgeeks”;} - invalid ; either add return inside {} or just do "geeksforgeeks" - no semicolon at the end
 
  ChatGPT
  Prompt : tell me in Java can I have lambda expression without functional interface
@@ -935,6 +958,43 @@ Supplier<String> messageSupplier = () -> "Hello, World!";
 Here, the compiler infers that the return type of the lambda expression () -> "Hello, World!" should be String because it's being assigned to a variable of type Supplier<String>.
 
 Overall, type inference in lambda expressions allows for more concise and readable code by reducing the need for explicit type declarations. It helps Java developers write more expressive code while still maintaining strong static type checking.
+
+
+# JVM Architecture, Memory Model and Garbage Collection 
+- https://medium.com/platform-engineer/understanding-jvm-architecture-22c0ddf09722
+- https://medium.com/platform-engineer/understanding-java-garbage-collection-54fc9230659a
+- https://medium.com/platform-engineer
+
+
+
+## JVM Architecture 
+- necessary components, libraries and APIs
+- JRE - Java Runtime Environment - to run Java apps - JVM and Deployment tools - for users of Java app
+- JDK - Java Development Kit - development tools + JRE - for programmers 
+- .java file compiled into bytecode .class file, using javac compiler 
+   -- bytecode is in hexadecimal format with opcode-operand lines and JVM interprets these instructions to run 
+   -- so bytecode is platform (OS) independent, JVM should match OS (Linux or Windows) 
+   -- JIT, Garbage Collection 
+- Java Source Code - Java Compiler -> Java ByteCode - class file in hexadecimal format opcode-operand 
+- Class Loader, Runtime Data Area (Memnory model), Execution Engine - OS - HW 
+- Class Loader - (Bootstrap /jre/lib, Extension jre/lib/ext, Application app class path) Class Loading - Linking (Verify, Prepare, Resolve) - Initialization 
+   -- class files to RAM - dynamic class loading - loads, links and initializes .class file at first run time of that class (not compile time) 
+   -- run time means Syste.out. or Person person = new Person() 
+   -- Visibility principle (child class loader and parent class loader) 
+   -- Uniqueness Principle: no duplicate class loading 
+   -- Delegation of Hierarrchy - 
+   -- No Unloading 
+   
+- Run Time (Memory) - Heap, Thread Stacks, PC Register, 
+   -- FQDN of class, parent class, interface, modifiers, static variables and methods in HEAP 
+   -- Method Area: one per JVM; shared among threads; class data 
+   -- HEAP: one per JVM; object data 
+   -- Stack: one per thread 
+   -- PC Registers: per thread
+- Execution Engine - Interpreter, JIT Compiler, Garbage COllector - Native Method Interface (JNI) - Native Method libs 
+ -- JIT
+ -- Garbage Collector
+
 
 
 

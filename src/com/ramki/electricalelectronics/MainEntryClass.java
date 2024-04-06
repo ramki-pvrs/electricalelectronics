@@ -20,10 +20,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
 import com.ramki.chatgptmultithreading.CounterForSynchronizedKeyWord;
+import com.ramki.chatgptmultithreading.GPTSharedResource;
+import com.ramki.chatgptmultithreading.GPTSharedResource_DecrementThread;
+import com.ramki.chatgptmultithreading.GPTSharedResource_IncrementThread;
 import com.ramki.chatgptmultithreading.GPT_Callable_Task;
 import com.ramki.chatgptmultithreading.GPT_Runnable_Task;
 import com.ramki.designpatterns.Discounter;
 import com.ramki.designpatterns.MyInterface;
+import com.ramki.java8features.FunctionalInterface1;
+import com.ramki.java8features.FunctionalInterface2;
 import com.ramki.javacollections.LearnCollections;
 //user package classes from other package
 import com.ramki.javaconcurrency.AdderDataSyncProblem;
@@ -37,6 +42,14 @@ import com.ramki.javaconcurrency.ValueForDataSync;
 
 
 public class MainEntryClass {
+    
+    //some random function for testing, so adde in MainEntryClass above main itself
+    //in proper program, this may in some other class
+    
+    //observe a functional interface object is passed as operate method parameter
+    private int operate(int x1, int x2, FunctionalInterface2 funcInt2) {
+        return funcInt2.doSomething_withTwoIntegers(x1, x2);
+    }
 
     public static void main(String[] args) throws InterruptedException {
         // TODO Auto-generated method stub
@@ -542,10 +555,80 @@ THE ORDER IN WHICH THE MAIN THREAD WAITS FOR INCREMENT and DECREMENT THREADS TO 
         }
         
         
+        //Reentrant lock
+        /*
+         1. a shared resource class (object) - with ReentrantLock Lock object
+         2. an increment Runnable operation on that shared resource
+         3. an decrement Runnable operation on that shared resource
+         4. main program calling both increment and decrement ops
+         
+         Lock is an interface
+         ReentrantLock is class implementing Lock (allows Reentrancy)
+         
+         */
+        
+        GPTSharedResource sharedResource = new GPTSharedResource();
+        Thread incrementReentrant_Thread = new Thread(new GPTSharedResource_IncrementThread(sharedResource)); //pass an object to Thread, the object which implements Runnable and takes shared resource as param
+        Thread decrementReentrant_Thread = new Thread(new GPTSharedResource_DecrementThread(sharedResource));
+        
+        incrementReentrant_Thread.start();
+        decrementReentrant_Thread.start();
+        
+        try {
+            incrementReentrant_Thread.join();
+            decrementReentrant_Thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Final count: " + sharedResource.getCounter());
+        
         
         
         
         System.out.println("END ChatGPT multithreading  ======================================================");
+        
+        System.out.println("START Lambda Expression  ======================================================");
+        
+        //Lambda expression implementing the abstract method of FunctionalInterface1 
+        
+        FunctionalInterface1 funcInt1 = (int i) -> System.out.println(2*i);
+        
+        //the above line is only (function) implementation
+        //now you have to use funcInt1.abstractFun as normal python function passing integer parameter
+        funcInt1.abstractFun(5);
+        
+        
+        //one functional interface with one abstract method FunctionalInterface2 - doSomething_withTwoIntegers
+        //three implementations using Lambda expressions
+        //add, minus and multiply
+        
+        FunctionalInterface2 addUs1 = (int i1, int i2) -> i1 + i2;
+        int addedValue = addUs1.doSomething_withTwoIntegers(103, 104);
+        
+        FunctionalInterface2 minusMe1 = (int i1, int i2) -> i1 - i2;
+        int minusedValue = minusMe1.doSomething_withTwoIntegers(1000, 2000);
+        
+        FunctionalInterface2 multiplyUs1 = (int i1, int i2) -> i1 * i2;
+        int multipliedValue = multiplyUs1.doSomething_withTwoIntegers(20, 52);
+        
+        System.out.println("3 Lambda expression implementations from single functional interface Add = " + addedValue + "; Minus = " + minusedValue + " Multiply = " + multipliedValue);
+        
+        //operate method is defined above main in this MainEntryClass itself
+        
+        //observe in operate method functional interface object is passed as parameter
+        
+        MainEntryClass ops1 = new MainEntryClass();
+        int opsAddedValue = ops1.operate(4, 5, addUs1); //Observe FunctionalInterface2 functional object addUs1 (implemented by Lambda expression)above is passed here
+        
+        System.out.println("Lambda Expression passed as param opsAddedValue = " + opsAddedValue);
+        
+        //String s111 = () -> "geeks for geeks"; //Compile error: The target type of this expression must be a functional interface
+        //Java lambda functions can be only used with functional interfaces.
+        //left side should be some functional interface
+        
+        
+        System.out.println("END Lambda Expression  ======================================================");
 
     } //END public static void main(String[] args) throws InterruptedException
 
