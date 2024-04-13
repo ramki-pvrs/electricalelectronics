@@ -375,7 +375,7 @@ Method submit extends base method Executor.execute(Runnable) by creating and ret
 The Executors class provides factory methods for the executor services provided in this package.  
 //https://www.baeldung.com/java-executor-service-tutorial
 
-## MultiThreads - Critical Section and Mutex (Mutual Exclusion) 
+## MultiThreads - Critical Section and Mutex (Mutual Exclusion)- two ways of Mutex - synchormized keyword or loc.lock()
 - https://www.baeldung.com/java-mutex 
 - https://www.baeldung.com/java-mutex#bd-synch
 - Part of the code block which accesses shared resources (like data-structures, input-output devices, files, and network connections) are called **Critical Section** 
@@ -435,6 +435,14 @@ Semaphores can be used in scenarios where a resource has limited capacity or to 
 In Java, semaphores are implemented using the Semaphore class from the java.util.concurrent package.
 In summary, the main difference between Mutex and Semaphore lies in their concurrency control mechanisms: Mutex allows only one thread to access a resource at a time, while Semaphore allows multiple threads to access the resource concurrently, up to a defined limit. The choice between them depends on the specific requirements of the application and the level of concurrency needed.
 
+## Semaphore with ConcurrentLinkedDeque
+- with synchronized keyword, the blocking happens at higher level, not allowing more than one thread to do something (execute tasks)
+- with semaphore and concurrent data structure (instead of List to store and handle producer-consumer store items), multiple threads are allwoed to be inside the store
+- but very low level, it is blocking by concurrent data structure 
+- meaning semaphore allows more than one thread, so if two shelves are having items, two consumer threads can try to consume but in a List type store, they both access index 0 to consume, which is NOT GOOD
+- so a concurrent data strcture, to make sure one thread consumes index 0 and the other index 1 of the shelf item (product)
+
+NOTE: that semaphore just allows five threads (some producers and consumers) to play but after that the content management at the low level stil shd be handled and typically blocking
 
 - A Mutex, short for "mutual exclusion," is a synchronization primitive used in concurrent programming to control access to shared resources. In Java, a Mutex typically refers to the concept of mutual exclusion achieved through various mechanisms such as the synchronized keyword or the Lock interface.
 
@@ -992,15 +1000,193 @@ Overall, type inference in lambda expressions allows for more concise and readab
    -- Stack: one per thread 
    -- PC Registers: per thread
 - Execution Engine - Interpreter, JIT Compiler, Garbage COllector - Native Method Interface (JNI) - Native Method libs 
- -- JIT
- -- Garbage Collector
+ -- Interpreter (.class file interpretation, similar to python)
+ -- JIT - adaptive compiling
+ -- Garbage Collector 
+ -- Java Native Interface JNI - C/C++ lib calls 
+ -- Native Method Libs - 
+- JVM Threads - application threads and system threads (main thread from public static void main(String[]))
 
 
 
-
-
-
-
-
-     
+## Java Garbage Collection 
+ - https://medium.com/platform-engineer/understanding-java-garbage-collection-54fc9230659a 
+ - https://medium.com/javarevisited/java-garbage-collection-101-java-8-changes-interview-questions-commands-algorithms-212ee5349a4c
+ - track live objects and destroy unreferenced objects in HEAP 
+ - a low priority background Daemon Thread - keeps checking for unreferenced objects 
+ - Garbage Collection Process steps - Mark, Normal Deletion, Deletion with Compacting (disk clean-up kind) 
+ - long lived objects vs short lived - Minor GC and Major GC 
+ - Mark & Sweep : sweep lists un-used mem blocks for new objects 
+ - What is unreferenced objects 
+   -- app to reach objects in Heap, root object outside Heap 
+   -- such root objects are Garbage Collection roots, Active Java threads, Static Variables, JNI refs, ... 
+   -- as long as app object is directly or indirectly referenced to these GC root objects, theare alive 
+   -- before destroy - finalize() method is run if present in class - run only once on any object (Ramki: because it is run before destroy) 
+   -- Case 1: nullifying object 
+   -- Case 2: Re-assigning the reference variable 
+   -- Case 3: object created inside method - once method completes its execution, objecct is no more required (Ramki: local var) 
+   -- Case 4: Anonymous Object: new Person("John Doe"), because no LHS 
+   -- Case 5: Objects with only internal references (Island of Isolation) 
    
+   
+- you can call Garbage Collector programmatically  
+  -- System.gc() 
+  -- Runtime.getRuntime().gc() method 
+  -- Serial execution of GC or Parallel Execution of GC
+  -- Memory Leaks: un-used but referenced objects
+
+
+## Java Memory Model (JMM)
+- cornerstone of Java Concurrency 
+- defines how Threds interact throuh memory 
+- multithreaded development JMM is pivot 
+- JMM serves as abstraction layer that dictates how Java programs interact with memory in multithreaded env 
+- challenges in concurrent execution: cache coherence, memory consistency errors, thread contention, re-ordering of instructions by both compilers and processors 
+- each thread has its own stack to store local variables and call information 
+-- therads communicate between them through main memory  (Heap) 
+- Challenges 
+-- Memory consistency errors: when threads do not have consisten view of shared data; happens-before rules
+-- Visiblity and Ordering; one thread change is visible to other thread; sequence of changes to shared variable 
+- Happens- Before relation: something should happen before something else 
+-- Rules: 1.Program Order; 2.Monitor Lock/Unlock; 3.Volatile Variable; 4.Thread Start, Termination; 5.Interruption; 6. Finalizer Rule; 7. Transitivit: A - B - C; 
+-- JMM descriobes how and when changes made by one thread to shared data (stored in Heap or method area) are visible to other threads 
+- Java Memory Model Components 
+-- Shared Variables 
+-- Volatilve Variables  (volatile keyword; stored in main memory and not in thread stack)
+-- Syncrhonized Blocks (synchronized keyword) 
+-- Final Fields 
+-- Atomic Variables - thread safe; atomic change; AtomicInteger, AtomicLong, AtomicBoolean, AtomicReference
+-- Concurent Data Structs like ConcurrentHashMap, 
+
+when to use Atmoic Variables vs volatile keyword vs synchronized vs final
+ChatGPT
+When choosing between atomic variables, the volatile keyword, synchronized blocks, and final keyword, it's important to consider the specific requirements of your program and the level of thread safety needed. Here's a comparison of when to use each:
+
+Atomic Variables:
+
+Use atomic variables when you need to perform atomic operations on variables shared across multiple threads.
+Atomic variables are suitable for scenarios where you need simple atomic operations like incrementing, decrementing, comparing and setting values, without using explicit locks or synchronization.
+They provide better performance compared to using synchronized blocks for simple operations.
+Examples: Counters, flags, simple state variables.
+volatile Keyword:
+
+Use the volatile keyword when you have a variable that is shared among multiple threads and you need to ensure visibility of changes to that variable across threads.
+It ensures that reads and writes to the variable are atomic and visible to other threads immediately.
+volatile is suitable when the variable is read frequently but updated infrequently.
+It's not suitable for cases where multiple operations need to be performed atomically on the variable.
+Examples: Flags, status variables.
+synchronized Keyword:
+
+Use synchronized blocks or methods when you need to protect critical sections of code that access shared mutable state.
+synchronized ensures mutual exclusion, meaning only one thread can execute the synchronized block at a time.
+It provides stronger thread safety guarantees compared to atomic variables or volatile, as it can protect complex operations and ensure consistency across multiple variables.
+However, synchronized can introduce potential performance overhead due to locking and contention.
+Examples: Accessing shared data structures, updating shared state.
+final Keyword:
+
+Use the final keyword to create immutable objects or constants.
+final variables ensure that their values cannot be changed after initialization.
+While final does not directly relate to concurrency control, it can be used to ensure thread safety by making objects immutable, which eliminates the need for synchronization when accessing them from multiple threads.
+Immutable objects are inherently thread-safe because their state cannot change once constructed.
+Examples: Constants, immutable objects.
+In summary, choose atomic variables for simple atomic operations, volatile for visibility guarantees, synchronized for protecting critical sections, and final for immutability and thread safety. The choice depends on the specific requirements of your application, the complexity of shared state access, and the desired level of thread safety.
+
+Create a class Node with following requirements
+It should have two data-members
+data:int
+next:Node
+It should have the following constructors
+A public constructor that takes an integer and sets the data field
+A public constructor that takes an integer as well as Node and sets both the data and the next field
+Implement necessary classes and interfaces to enable for-each loop over Node class.
+
+
+Create a Node class with data members int data and Node next
+and write necessary classes and interfaces to enable for-each loop over Node class.
+
+ramkipvrs_9642dd24bf32
+108a286f4375
+
+# UML - Unified Modeling Language 
+- for better communication by standardizing
+- 1. Structural 2. Behavioral 
+- Structural is code base Behavior is how your system is working 
+- Important 
+ -- Structural - Class Diagram 
+ -- Behavioral - Use-Case Diagram (features and functions and who are the users)
+- More - less important: Package, Component, Object in Strutural and Activity and Sequence diagrams in Behavioral 
+## Use-Case Diagram - 5 Critical words
+- 1. System Boundary - a Rectangle 
+-- does not include out-sourced function 
+- 2. Use-cases - a Oval 
+-- Book Ticket, Login, Raise Request 
+- 3. Actors (Users) - generally outside System Boundary Rectangle
+-- Mentor, Student, Teache... 
+- 4. Includes - a function including two functions - Checkout() oval includes FillHomeAddress() oval and MakePayment() oval 
+- 5. Extends - one feature having multiple variants - Login vis email, Google, Mobile; LoginByEmail(), LoginByMobile(), LoginByGoogle() points to Login feature oval
+
+## Class Diagram 
+- represents different entities in your system - classes, interfaces, abstract classes, enums 
+- relation between entities 
+-- implement interface 
+-- extend class 
+-- having a class inside another class relation (association)
+- 
+- <<Interface Name>>
+- Abstract class name in italics
+- all statics are underlined
+- ENUMS names are comma separate actial enums 
+### Class Relationships 
+- Implementing Interfaces Interface <------- Class
+- Class Extensions 
+   -- Parent <--------- Child
+- Association (one class having object of other class; is it tight coupling or loose coupling) 
+-- Composition (strong association - to create, ARR composed a song) and Aggregation (weak association - collecting) 
+-- Aggregation : FruitBasket - Fruits in it - represented by hallow diamond symbol
+-- Composition: Folder with Files; delete folder files are deleted; strong relation - solid diamond icon 
+
+
+# Design 
+- Type of LLD interviews: theory, design, machine coding 
+- Theory: e.g. what is polymorphism or singleton design pattern 
+- Design: problem solving part; case study; design PayTM or Bookmyshow; entities, classes, relationships, data flow, use-cases; class diagram - design LRU Cache 
+- Machine Coding: DSA coding and feature coding; Design + Code; End to End working code - 2 to 2.5 hours 
+     
+- Design : one line requirement; task is to gather requirements - class diagram - code for classes
+- Machine Coding: here clarfiy requirments then clas diagram and end to end coding - 
+
+# Design a Pen 
+- align your thoughts with interviewer
+- Case 1: I know the problem statement or domain 
+- Case 2: I do not know the problem statemnt or domain 
+- clarifications from giver - ink pen, ball point pen; luxury or normal pen; use and throw ... kind
+- Entity Design - System Design 
+- DO I need to persist data (dB) 
+- how do I interact with system REST API, CLI or Hardcoded values 
+- begin with minimum viable product requirements top 5 critical features 
+- edge cases and failure scenarios 
+- availability, fail safe, performant, upgradable, 
+- CLASSES, INTERFACES, ENUMS, DESIGN PATTERNS
+
+# Book My Show BMS - movie ticket booking
+- User should be able to book Movie Ticket
+- BMS can have supported regions 
+- Each region multiple theaters 
+- Each theater multiple screens and each theater multiple movies 
+- different movies in different screens in one theater
+- user books a movie show in one theatre in one screen at a particular time - a single Show - show is a function of Movie, Theatre, Screen, Time
+- user books a seat of particular Type (Gold Seat, Silver Seat, Diamond Seat or Maharaja Seat...)
+- at max 10 tickets at a time (during payment seats are blocked and all seats getting blocked is bad)
+- no two users should be able to book same tickets (not immediately Multithreading Lock here, use some dB value) 
+- price - show * seat type 
+- show is a function of Movie, Theatre, Screen, Time 
+- price is fixed for that show for any users - decide fixed price or variable pricing? if I book 10 ticketts can I get come discount???
+- for a Movie, show movie details like Langugage, Title, Director, Actors, 2D/3D ....
+- user should see seat layout 
+- only online payment, payment gateway .... payment details stored
+- all data persisted - platform fee for every booking 
+- cancellation of booking?? 
+- see booking history 
+- 
+- Add-on features??
+

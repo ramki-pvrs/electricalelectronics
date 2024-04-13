@@ -511,7 +511,7 @@ THE ORDER IN WHICH THE MAIN THREAD WAITS FOR INCREMENT and DECREMENT THREADS TO 
         
         
         //Callable implementation
-        //1. get a thread pool using ExecutorService interface
+        //1. get a thread pool using ExecutorService interface with int pool size as param
         //2. based on number of Tasks create a futures collection (ArrayList) to hold the return values
         //3. create your task object
         //4. submit your task object to executorService (threadpool) which will return single fture 
@@ -520,8 +520,7 @@ THE ORDER IN WHICH THE MAIN THREAD WAITS FOR INCREMENT and DECREMENT THREADS TO 
         
         
         //ExectorService is interface
-        //Executors in concrete class
-        //newFixedThreadPool is static method in it (you dont need an object then)
+        //Executors in concrete class; newFixedThreadPool is static method in it (you dont need an object then)
         
         //create a thread pool with fixed number of threads
         ExecutorService executorService = Executors.newFixedThreadPool(3);
@@ -575,8 +574,8 @@ THE ORDER IN WHICH THE MAIN THREAD WAITS FOR INCREMENT and DECREMENT THREADS TO 
         decrementReentrant_Thread.start();
         
         try {
-            incrementReentrant_Thread.join();
-            decrementReentrant_Thread.join();
+            incrementReentrant_Thread.join(); //only main thread will wait on increment task; both increment and decrement tasks are concurrent
+            decrementReentrant_Thread.join(); //only main thread will wait on decrement task; both increment and decrement tasks are concurrent
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -603,6 +602,11 @@ THE ORDER IN WHICH THE MAIN THREAD WAITS FOR INCREMENT and DECREMENT THREADS TO 
         //three implementations using Lambda expressions
         //add, minus and multiply
         
+        //FunctionalInterface2
+        //only one abstract method with return type specified and 2 parameters
+        //int doSomething_withTwoIntegers(int x1, int x2); 
+        
+        //Lambda expression implementing the abstract method of FunctionalInterface2
         FunctionalInterface2 addUs1 = (int i1, int i2) -> i1 + i2;
         int addedValue = addUs1.doSomething_withTwoIntegers(103, 104);
         
@@ -627,6 +631,17 @@ THE ORDER IN WHICH THE MAIN THREAD WAITS FOR INCREMENT and DECREMENT THREADS TO 
         //Java lambda functions can be only used with functional interfaces.
         //left side should be some functional interface
         
+        ArrayList<String> list = new ArrayList<String>();
+        
+        
+        // Use add() method to add elements in the list
+        list.add("Geeks");
+        list.add("for");
+        list.add("Geeks");
+        list.add("10");
+        list.add("20");
+        
+        list.isEmpty();
         
         System.out.println("END Lambda Expression  ======================================================");
 
